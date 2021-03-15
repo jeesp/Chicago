@@ -1,7 +1,9 @@
-<h1> Tämä on ot-harjoitustyön README </h1>
+<h1> Ohjelmistotekniikka, harjoitustyö </h1>
 
-**Tässä on hieman lihavoitua tekstiä**
+<h2> Tehtävät </h2>
 
-*Ja tässä tekstiä kursivoituna*
+<h3> Viikko 1 </h3>
 
-Ja tässä ilman mitään
+[komentorivi.txt]https://github.com/jeesp/ot-harjoitustyo/blob/main/laskarit/viikko1/komentorivi.txt
+
+[gitlog.txt]https://github.com/jeesp/ot-harjoitustyo/blob/main/laskarit/viikko1/gitlog.txt
