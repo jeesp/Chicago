@@ -11,7 +11,9 @@
 <h3> Viikko 2 </h3>
 
 [Vaatimusmäärittely](https://github.com/jeesp/ot-harjoitustyo/blob/main/dokumentaatio/vaatimusmaarittely.md)
+
 [Tuntikirjanpito](https://github.com/jeesp/ot-harjoitustyo/blob/main/dokumentaatio/tuntikirjanpito.md)
+
 [2. viikon laskarit](https://github.com/jeesp/ot-harjoitustyo/tree/main/laskarit/viikko2)
 
 
