@@ -2,6 +2,9 @@ class Player:
     def __init__(self, name):
         self.name = name
         self.hand = []
+    def remove_card(self, card):
+        self.hand.remove(card)
+        return
     def hand_value(self):
         player = self
         suits = set()
@@ -15,10 +18,24 @@ class Player:
 
         if len(suits) == 1:
             flush = True
-        for i in range(1,5):
-            if numbers[i] - numbers[i-1] != 1:
+        if numbers[len(numbers)-1] == 14:
+            if numbers[len(numbers)-2] == 14:
                 straight = False
-                break
+            else:
+                numbers.append(1)
+                numbers.sort()
+                i = 1
+                while i < len(numbers):
+                    if numbers[i]- numbers[i-1] != 1:
+                        straight = False
+                        numbers.remove(1)
+                        break
+                    i += 1
+        else:
+            for i in range(1,5):
+                if numbers[i] - numbers[i-1] != 1:
+                    straight = False
+                    break
         if flush and straight:
             return (10, numbers[len(numbers)-1])
         if flush:

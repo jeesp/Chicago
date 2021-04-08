@@ -13,6 +13,9 @@ class Deck:
                 cards.append((number, suit, number_string+"_of_"+suit))
         self.cards = cards
         self.dealt_cards = []
+    def add_card_to_dealt_cards(self,card):
+        self.dealt_cards.append(card)
+        return
     def deal_cards(self, players):
         for player in players:
             while len(player.hand) < 5:
