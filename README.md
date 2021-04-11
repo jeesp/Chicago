@@ -1,20 +1,43 @@
-<h1> Ohjelmistotekniikka, harjoitustyö </h1>
+<h1> Chigago-sovellus </h1>
 
-<h2> Tehtävät </h2>
+Sovelluksessa 4 käyttäjää pystyy pelaamaan vastakkain Chicago-korttipeliä. Chicagossa pelataan aluksi 2 kierrosta pokeria ja kierros päätetään tikkiin. Kummankin pokerikierroksen jälkeen pelaajan on mahdollista vaihtaa enintään 4 korttia. Wikipedia: https://fi.wikipedia.org/wiki/Chicago_(korttipeli)
 
-<h3> Viikko 1 </h3>
+<h3> Python-versio </h3>
+Sovelluksen toimintaa on testattu Python-versiolla 3.6.0. Vanhempien Python-versioiden kanssa saattaa esiintyä ongelmia. 
 
-[komentorivi.txt](https://github.com/jeesp/ot-harjoitustyo/blob/main/laskarit/viikko1/komentorivi.txt)
-
-[gitlog.txt](https://github.com/jeesp/ot-harjoitustyo/blob/main/laskarit/viikko1/gitlog.txt)
-
-<h3> Viikko 2 </h3>
+<h3> Dokumentaatio </h3>
 
 [Vaatimusmäärittely](https://github.com/jeesp/ot-harjoitustyo/blob/main/dokumentaatio/vaatimusmaarittely.md)
 
 [Tuntikirjanpito](https://github.com/jeesp/ot-harjoitustyo/blob/main/dokumentaatio/tuntikirjanpito.md)
 
-[2. viikon laskarit](https://github.com/jeesp/ot-harjoitustyo/tree/main/laskarit/viikko2)
+<h3> Asennus </h3>
+
+1. Asenna riippuvuudet komennolla:
+
+```bash
+poetry install
+```
+
+2. Suorita vaadittavat alustukset:
+
+```bash
+poetry run invoke build
+```
+<h3> Sovelluksen käyttö </h3>
+
+1. Käynnistä sovellus:
+
+```bash
+poetry run invoke start
+```
+<h3> Testaus </h3>
+
+1. Testikattavuusraportin voi generoida komennolla:
+
+```bash
+poetry run invoke coverage-report
+```
 
 
 

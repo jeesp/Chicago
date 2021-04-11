@@ -6,3 +6,5 @@
 | 31.3 | 5 | Toiminnallisuuksien edistämistä |
 | 8.4 | 4 | Tikin aloittaminen, pelilogiikan edistäminen |
 | 9.4 | 5 | Tikin edistäminen, pelin jatkuvuuden toteuttaminen |
+| 11.4 | 2 | Testien edistäminen toimimaan poetry-komennoilla |
+|11.4 | 1 | Pelin toimivuuden edistäminen |

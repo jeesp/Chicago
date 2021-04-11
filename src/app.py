@@ -51,24 +51,16 @@ def main():
             for hand in hands:
                 print (hand[0].name+"n käsi: ", hand_values[hand[1][0]].lower())
             print("Valitse vaihdettavat kortit: ")
-            for hand in hands:
-                print(hand[0].name + ", mitä vaihdetaan? Anna indeksi")
-                i = 0
-                while i < len(hand[0].hand):
-                    print(str(i) + ": " + hand[0].hand[i][2])
-                    i += 1
-                changecards_ids = input("Syötä indeksit pilkulla erotettuna: ")
-                print (changecards_ids)
-                changedcards_ids_as_list = changecards_ids.split(",")
-                print(changedcards_ids_as_list)
-                cards_to_change = []
-                if changecards_ids != "":
-                    for id in changedcards_ids_as_list:
-                        cards_to_change.append(hand[0].hand[int(id)])
-                    for card in cards_to_change:
-                        deck.add_card_to_dealt_cards(card)
-                        hand[0].remove_card(card)
-                print (cards_to_change)
+            turn = dealing_turn
+            change_card(hands[turn], deck)
+            turn += 1
+            if turn == len(players):
+                turn = 0
+            while turn != dealing_turn:
+                change_card(hands[turn], deck)
+                turn += 1
+                if turn == len(players):
+                    turn = 0
             deals += 1
         random.shuffle(deck.cards)
         deck.deal_cards(players)
@@ -123,7 +115,24 @@ def set_compare_card(player,card):
     compare_card_suit = card[1]
     compare_card_player = player
     return (compare_card_number, compare_card_suit, compare_card_player)
-
+def change_card(hand, deck):
+    print(hand[0].name + ", mitä vaihdetaan? Anna indeksi")
+    i = 0
+    while i < len(hand[0].hand):
+        print(str(i) + ": " + hand[0].hand[i][2])
+        i += 1
+    changecards_ids = input("Syötä indeksit pilkulla erotettuna: ")
+    print (changecards_ids)
+    changedcards_ids_as_list = changecards_ids.split(",")
+    print(changedcards_ids_as_list)
+    cards_to_change = []
+    if changecards_ids != "":
+        for id in changedcards_ids_as_list:
+            cards_to_change.append(hand[0].hand[int(id)])
+        for card in cards_to_change:
+            deck.add_card_to_dealt_cards(card)
+            hand[0].remove_card(card)
+    print (cards_to_change)
 def play_card(player, compare_card):
     i = 0
     playable_cards = []
