@@ -19,11 +19,6 @@ Sovelluksen toimintaa on testattu Python-versiolla 3.6.0. Vanhempien Python-vers
 poetry install
 ```
 
-2. Suorita vaadittavat alustukset:
-
-```bash
-poetry run invoke build
-```
 <h3> Sovelluksen käyttö </h3>
 
 1. Käynnistä sovellus:
@@ -31,6 +26,7 @@ poetry run invoke build
 ```bash
 poetry run invoke start
 ```
+
 <h3> Testaus </h3>
 
 1. Testikattavuusraportin voi generoida komennolla:
