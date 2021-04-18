@@ -17,4 +17,17 @@ Värisuora: peli loppuu ja kyseinen pelaaja voittaa
 Tikin lopetus: 5p
 Tikin lopetus kakkosella: 10p
 Chicago (onnistunut/epäonnistunut): 15/-15
-Blanco-chicago (onnistunut/epäonnistunu): 30/-30
+Blanco-chicago (onnistunut/epäonnistunut): 30/-30
+
+## Todo-lista
+Sovelluslogiikka
+- [x] Pokerin pisteytykset
+- [x] Pokerikierrokset/logiikka
+- [x] Korttien vaihtaminen
+- [x] Tikin logiikka
+- [x] Kortin pelaaminen
+- [x] Tulostaulu
+- [x] Chicago
+- [x] Blanco-chicago
+- [ ] Graafinen käyttöliittymä kokonaisuudessaan
+
