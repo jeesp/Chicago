@@ -11,4 +11,5 @@
 |17.4 | 3 | Pylintin lisääminen ja sen osoittamien virheiden korjaamista |
 |18.4 | 1 | Sovelluksen jakamista eri tiedostoihin |
 |18.4 | 3 | Chicago ja blanco-chicago lisätty, virheitä korjattu |
+|19.4 | 6 | Testejä lisätty, sovelluslogiikkaa eriytetty, luokkakaavio tehty |
 
