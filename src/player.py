@@ -14,12 +14,12 @@ class Player:
         numbers.sort()
         if Player.check_straight_and_flush(self, suits, numbers) is not None:
             return Player.check_straight_and_flush(self, suits, numbers)
-        if Player.check_same_numbers(self,numbers) is not None:
-            return Player.check_same_numbers(self,numbers)
-        return (0,0)
-    def check_same_numbers(self,numbers):
+        if Player.check_same_numbers(self, numbers) is not None:
+            return Player.check_same_numbers(self, numbers)
+        return (0, 0)
+    def check_same_numbers(self, numbers):
         same_numbers = dict()
-        for i in range(0,5):
+        for i in range(0, 5):
             if numbers[i] not in same_numbers:
                 same_numbers[numbers[i]] = 1
             else:
@@ -75,7 +75,7 @@ class Player:
                         break
                     i += 1
         else:
-            for i in range(1,5):
+            for i in range(1, 5):
                 if numbers[i] - numbers[i-1] != 1:
                     straight = False
                     break
