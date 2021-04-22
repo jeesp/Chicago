@@ -1,4 +1,6 @@
 import random
+
+
 class Deck:
     def __init__(self):
         suits = ['hearts', 'diamonds', 'spades', 'clubs']
@@ -8,13 +10,21 @@ class Deck:
             for number in numbers:
                 if number == 14:
                     number_string = 'ace'
+                if number == 13:
+                    number_string = 'king'
+                if number == 12:
+                    number_string = 'queen'
+                if number == 11: 
+                    number_string = 'jack'
                 else:
                     number_string = str(number)
                 cards.append((number, suit, number_string+"_of_"+suit))
         self.cards = cards
         self.dealt_cards = []
+
     def add_card_to_dealt_cards(self, card):
         self.dealt_cards.append(card)
+
     def deal_cards(self, players):
         for player in players:
             while len(player.hand) < 5:
@@ -26,4 +36,3 @@ class Deck:
                     card = random.choice(self.dealt_cards)
                     self.dealt_cards.remove(card)
                     player.hand.append(card)
-            

@@ -7,11 +7,13 @@ authors = ["Jesper Grönroos <jesper.gronroos@hotmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.6"
 invoke = "^1.5.0"
+pygame = "^2.0.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.2"
 coverage = "^5.5"
 pylint = "^2.7.4"
+autopep8 = "^1.5.6"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

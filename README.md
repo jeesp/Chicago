@@ -11,6 +11,8 @@ Sovelluksen toimintaa on testattu Python-versiolla 3.6.0. Vanhempien Python-vers
 
 [Tuntikirjanpito](https://github.com/jeesp/ot-harjoitustyo/blob/main/dokumentaatio/tuntikirjanpito.md)
 
+[Arkkitehtuuri](https://github.com/jeesp/ot-harjoitustyo/blob/main/dokumentaatio/arkkitehtuuri.md)
+
 <h3> Asennus </h3>
 
 1. Asenna riippuvuudet komennolla:
@@ -34,6 +36,15 @@ poetry run invoke start
 ```bash
 poetry run invoke coverage-report
 ```
+2. Tee Pylint-testi seuraavalla komennolla:
+
+```bash
+poetry run invoke lint
+```
+
+<h4> Lisätietoja </h4>
+
+Graafisessa käyttöliittymässä käytetään MIT-lisenssin kuvia.
 
 
 

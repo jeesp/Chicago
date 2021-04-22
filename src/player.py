@@ -2,8 +2,10 @@ class Player:
     def __init__(self, name):
         self.name = name
         self.hand = []
+
     def remove_card(self, card):
         self.hand.remove(card)
+
     def hand_value(self):
         player = self
         suits = set()
@@ -17,6 +19,7 @@ class Player:
         if Player.check_same_numbers(self, numbers) is not None:
             return Player.check_same_numbers(self, numbers)
         return (0, 0)
+
     def check_same_numbers(self, numbers):
         same_numbers = dict()
         for i in range(0, 5):
@@ -31,7 +34,7 @@ class Player:
             if same_numbers[number] == 4:
                 return (8, number)
             if (same_numbers[number] == 2 and three_of_a_kind) \
-                or (same_numbers[number] == 3 and pair):
+                    or (same_numbers[number] == 3 and pair):
                 return (6, 1)
             if same_numbers[number] == 3:
                 three_of_a_kind = True
@@ -39,11 +42,12 @@ class Player:
                 two_pairs = True
             if same_numbers[number] == 2:
                 pair = True
-        if Player.check_pairs_and_three_of_a_kind(self, same_numbers, \
-            three_of_a_kind, two_pairs, pair) is not None:
-            return Player.check_pairs_and_three_of_a_kind(self, same_numbers, \
-                three_of_a_kind, two_pairs, pair)
+        if Player.check_pairs_and_three_of_a_kind(self, same_numbers,
+                                                  three_of_a_kind, two_pairs, pair) is not None:
+            return Player.check_pairs_and_three_of_a_kind(self, same_numbers,
+                                                          three_of_a_kind, two_pairs, pair)
         return None
+
     def check_pairs_and_three_of_a_kind(self, same_numbers, three_of_a_kind, two_pairs, pair):
         if three_of_a_kind:
             for number in same_numbers:
@@ -56,6 +60,7 @@ class Player:
                 if same_numbers[number] == 2:
                     return (1, number)
         return None
+
     def check_straight_and_flush(self, suits, numbers):
         flush = False
         straight = True
@@ -69,7 +74,7 @@ class Player:
                 numbers.sort()
                 i = 1
                 while i < len(numbers):
-                    if numbers[i]- numbers[i-1] != 1:
+                    if numbers[i] - numbers[i-1] != 1:
                         straight = False
                         numbers.remove(1)
                         break

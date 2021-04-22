@@ -2,6 +2,8 @@ import random
 from player import Player
 from deck import Deck
 from game_actions import play_poker, play_trick, compare_hands, round_ending
+
+
 def play():
     players = []
     player1 = Player('Ake')
@@ -28,7 +30,8 @@ def play():
             chicago = dict()
             for player in players:
                 chicago[player] = 0
-            play_poker(deck, chicago, deals, players, hands, score_board, hand_values, dealing_turn)
+            play_poker(deck, chicago, deals, players, hands,
+                       score_board, hand_values, dealing_turn)
             deals += 1
         deck.deal_cards(players)
         value_comparison = compare_hands(hands)
@@ -39,8 +42,10 @@ def play():
             dealing_turn = 0
         if round_ending(chicago, value_comparison, score_board, hand_values, players):
             break
+
+
 def set_player(players, number):
-    print(str(number)+ ". pelaajan nimi: ", end=" ")
+    print(str(number) + ". pelaajan nimi: ", end=" ")
     name = input()
     player = Player(name)
     players.append(player)
