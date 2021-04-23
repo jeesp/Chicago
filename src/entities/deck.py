@@ -10,11 +10,11 @@ class Deck:
             for number in numbers:
                 if number == 14:
                     number_string = 'ace'
-                if number == 13:
+                elif number == 13:
                     number_string = 'king'
-                if number == 12:
+                elif number == 12:
                     number_string = 'queen'
-                if number == 11: 
+                elif number == 11: 
                     number_string = 'jack'
                 else:
                     number_string = str(number)

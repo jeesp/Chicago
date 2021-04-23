@@ -1,10 +1,11 @@
 import random
-from player import Player
-from deck import Deck
+from entities.player import Player
+from entities.deck import Deck
 from game_actions import play_poker, play_trick, compare_hands, round_ending
 
 
 def play():
+    
     players = []
     player1 = Player('Ake')
     players.append(player1)
@@ -21,6 +22,9 @@ def play():
                    5: "Väri", 6: "Täyskäsi", 8: "Neloset", 10: "Värisuora"}
     deals = 0
     dealing_turn = 0
+    deck = Deck()
+    random.shuffle(deck.cards)
+    deck.deal_cards(players)
     while True:
         deck = Deck()
         while deals < 2:

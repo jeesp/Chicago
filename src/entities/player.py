@@ -74,7 +74,7 @@ class Player:
                 numbers.sort()
                 i = 1
                 while i < len(numbers):
-                    if numbers[i] - numbers[i-1] != 1:
+                    if numbers[i] - numbers[i-1] != 1 and (numbers[i] != 14 or numbers[i] != 10):
                         straight = False
                         numbers.remove(1)
                         break
