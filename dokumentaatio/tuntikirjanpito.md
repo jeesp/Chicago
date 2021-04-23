@@ -15,5 +15,6 @@
 | 22.4 | 4 | Graafisen käyttöliittymän rakentaminen aloitettu |
 | 22.4 | 3 | Graafisen käyttöliittymän logiikan edistämistä |
 | 23.4 | 3 | Graafisen käyttöliittymän liittämistä osaksi sovellusta |
-| Yht. | 51 | |
+| 23.4 | 1 | Sekvenssikaavion tekeminen, testien lisääminen|
+| Yht. | 52 | |
 
