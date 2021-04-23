@@ -14,5 +14,6 @@
 | 19.4 | 6 | Testejä lisätty, sovelluslogiikkaa eriytetty, luokkakaavio tehty |
 | 22.4 | 4 | Graafisen käyttöliittymän rakentaminen aloitettu |
 | 22.4 | 3 | Graafisen käyttöliittymän logiikan edistämistä |
-| Yht. | 45 | |
+| 23.4 | 3 | Graafisen käyttöliittymän liittämistä osaksi sovellusta |
+| Yht. | 51 | |
 
