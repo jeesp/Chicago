@@ -2,21 +2,21 @@ def end_game_poker_comparison(value_comparison, score_board, hand_values):
     if value_comparison[0] != 0:
         score_board[value_comparison[0]] += value_comparison[1]
         if value_comparison[2] == 0:
-            print("Lopun pokeripisteet sai: " + value_comparison[0].name + ". Käsi: "
+            return ("Lopun pokeripisteet sai: " + value_comparison[0].name + ". Käsi: "
                   + hand_values[value_comparison[1]].lower() + ".")
         if value_comparison[2] == 1:
-            print("Lopun pokeripisteet sai: " + value_comparison[0].name + ". Käsi: "
+            return ("Lopun pokeripisteet sai: " + value_comparison[0].name + ". Käsi: "
                   + hand_values[value_comparison[1]].lower() +
                   ". Myös toisella pelaajalla oli "
                   + hand_values[value_comparison[1]].lower() + ".")
     else:
         if value_comparison[2] == 2:
-            print("Kahdella pelaajalla oli sama käsi: "
+            return ("Kahdella pelaajalla oli sama käsi: "
                   + hand_values[value_comparison[1]].lower()
                   + ". Kukaan ei saanut pisteitä.")
         else:
-            print(
-                "Kenelläkään ei ollut mitään, joten kukaan ei saanut lopun pokeripisteitä.")
+            return ("Kenelläkään ei ollut mitään, joten kukaan ei saanut lopun " 
+                    + "pokeripisteitä.")
 
 
 def play_poker(deck, chicago, deals, players, hands, score_board, hand_values, dealing_turn):
@@ -267,7 +267,7 @@ def round_ending(chicago, value_comparison, score_board, hand_values, players):
         if chicago[player] != 0:
             no_chicagos = False
     if no_chicagos:
-        end_game_poker_comparison(value_comparison, score_board, hand_values)
+        print (end_game_poker_comparison(value_comparison, score_board, hand_values))
     else:
         print("Kierroksella huudettiin chicago, ei pokeripisteitä.")
     for player in score_board:

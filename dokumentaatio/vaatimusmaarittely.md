@@ -29,5 +29,12 @@ Sovelluslogiikka
 - [x] Tulostaulu
 - [x] Chicago
 - [x] Blanco-chicago
-- [ ] Graafinen käyttöliittymä kokonaisuudessaan
+- [x] Graafinen käyttöliittymä 1. pokerinäkymä
+- [ ] Graafinen käyttöliittymä 2. vaihtonäkymä
+- [ ] Graafinen käyttöliittymä tikkinäkymä
+- [ ] Graafinen käyttöliittymä tulostaulu
+- [ ] Graafisen käyttöliittymän liittäminen osaksi sovellusta
+- [ ] Graafinen käyttöliittymä alkunäkymä
+- [ ] Graafinen käyttöliittymä lopetusnäkymä
+- [ ] Graafinen käyttöliittymä pelaajien nimien syöttäminen
 

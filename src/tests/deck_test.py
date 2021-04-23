@@ -3,7 +3,7 @@ from entities.deck import Deck
 from entities.player import Player
 
 
-class TestPlayer(unittest.TestCase):
+class TestDeck(unittest.TestCase):
     def setUp(self):
         self.deck = Deck()
         self.player = Player("Jake")
@@ -29,3 +29,17 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(len(self.deck.cards), 47)
         self.assertEqual(len(self.player.hand), 5)
         self.assertEqual(len(self.deck.dealt_cards), 0)
+    def test_dealing_from_dealt(self):
+        players = []
+        players.append(self.player)
+        self.player.hand = [(3, 'hearts', '3_of_hearts')] 
+        self.deck.cards = []
+        self.deck.dealt_cards = [(4, 'spades', '4_of_spades'), (13, 'spades', '13_of_spades'), (
+            5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
+        self.deck.deal_cards(players)
+        self.assertEqual(len(self.deck.cards), 0)
+        self.assertEqual(len(self.player.hand), 5)
+        self.assertEqual(len(self.deck.dealt_cards), 1)
+    def test_add_card_to_dealt_cards(self):
+        self.deck.add_card_to_dealt_cards((5,'spades', '5_of_spades'))
+        self.assertEqual(len(self.deck.dealt_cards), 1)
