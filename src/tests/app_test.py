@@ -1,6 +1,6 @@
 import unittest
-from player import Player
-from deck import Deck
+from entities.player import Player
+from entities.deck import Deck
 from game_actions import end_game_poker_comparison, play_poker, play_trick, compare_hands, end_trick
 
 

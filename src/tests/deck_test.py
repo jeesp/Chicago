@@ -1,6 +1,6 @@
 import unittest
-from deck import Deck
-from player import Player
+from entities.deck import Deck
+from entities.player import Player
 
 
 class TestPlayer(unittest.TestCase):
