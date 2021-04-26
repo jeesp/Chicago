@@ -31,12 +31,19 @@ poetry run invoke start
 
 <h3> Testaus </h3>
 
-1. Testikattavuusraportin voi generoida komennolla:
+1. Testit voi suorittaa komennolla:
+
+```bash
+poetry run invoke test
+```
+
+2. Testikattavuusraportin voi generoida komennolla:
 
 ```bash
 poetry run invoke coverage-report
 ```
-2. Tee Pylint-testi seuraavalla komennolla:
+
+3. Pylint-tarkistuksen voi suorittaa komennolla:
 
 ```bash
 poetry run invoke lint
