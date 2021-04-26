@@ -5,6 +5,10 @@ Sovelluksessa 4 käyttäjää pystyy pelaamaan vastakkain Chicago-korttipeliä. 
 <h3> Python-versio </h3>
 Sovelluksen toimintaa on testattu Python-versiolla 3.6.0. Vanhempien Python-versioiden kanssa saattaa esiintyä ongelmia. 
 
+<h3> Linkki Github-releaseen </h3>
+
+[Release](https://github.com/jeesp/ot-harjoitustyo/releases/tag/viikko5)
+
 <h3> Dokumentaatio </h3>
 
 [Vaatimusmäärittely](https://github.com/jeesp/ot-harjoitustyo/blob/main/dokumentaatio/vaatimusmaarittely.md)
