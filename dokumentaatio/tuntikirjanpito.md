@@ -16,5 +16,7 @@
 | 22.4 | 3 | Graafisen käyttöliittymän logiikan edistämistä |
 | 23.4 | 3 | Graafisen käyttöliittymän liittämistä osaksi sovellusta |
 | 23.4 | 1 | Sekvenssikaavion tekeminen, testien lisääminen|
-| Yht. | 52 | |
+| 28.4 | 4 | Sovelluksen liittämistä graafiseen käyttöliittymään|
+| 28.4 | 2 | GUI:n ja sovelluslogiikan yhdistämistä |
+| Yht. | 58 | |
 
