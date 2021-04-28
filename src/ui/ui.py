@@ -7,6 +7,7 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.
 sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 from entities.player import Player
 from entities.deck import Deck
+from game_actions import play_poker, play_trick, compare_hands, round_ending, poker_points
 
 class GUI(object):
     def __init__(self):
@@ -19,16 +20,15 @@ class GUI(object):
         players.append(player3)
         player4 = Player('Åke')
         players.append(player4)
-        score_board = dict()
+        self.score_board = dict()
         for player in players:
-            score_board[player] = 0
-        hand_values = {0: "Ei mitään", 1: "Pari", 2: "Kaksi paria", 3: "Kolmoset", 4: "Suora",
+            self.score_board[player] = 0
+        self.hand_values = {0: "Ei mitään", 1: "Pari", 2: "Kaksi paria", 3: "Kolmoset", 4: "Suora",
                        5: "Väri", 6: "Täyskäsi", 8: "Neloset", 10: "Värisuora"}
-        deals = 0
-        dealing_turn = 0
+        self.deals = 0
+        self.dealing_turn = 0
+        self.starting_player = 0
         deck = Deck()
-        random.shuffle(deck.cards)
-        deck.deal_cards(players)
         self.players = players
         self.deck = deck
         pygame.init()
@@ -36,13 +36,18 @@ class GUI(object):
         self.WIDTH = 800
         self.HEIGHT = 600
         self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
-        self.FPS = 60
+        self.FPS = 15
         self.current_path = os.path.dirname(__file__)
         self.CARD_SIZE = (80,120)
         self.CARD_IMAGE = pygame.image.load(os.path.join(os.path.dirname(self.current_path),'assets', 'cards', 'back-side.png'))
         self.CARD = pygame.transform.scale(self.CARD_IMAGE, self.CARD_SIZE)
         self.SIDE_CARD = pygame.transform.rotate(self.CARD, 90)
         self.POKER_GREEN = (53,101,77)
+        self.mode = 0
+        self.turn = 0
+        self.card_selected = False
+        self.played_cards = []
+        self.compare_card = None
 
     def draw_window(self):
         self.screen.fill(self.POKER_GREEN, (0,0, 800, 600))
@@ -104,62 +109,45 @@ class GUI(object):
         return start_button
     def main(self):
         clock = pygame.time.Clock()
-        turn = 0
         players_cards = []
         continue_button = pygame.draw.rect(self.screen, self.POKER_GREEN, pygame.Rect(0,0, self.CARD_SIZE[0], self.CARD_SIZE[1]))
         run = True
-        mode = 0
+        game_to_play = 0
+        random.shuffle(self.deck.cards)
+        self.deck.deal_cards(self.players)
         while run:
             clock.tick(self.FPS)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
-                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    mouse_position = pygame.mouse.get_pos()
-                    for card in players_cards:
-                        if card[1].collidepoint(mouse_position):
-                            pygame.draw.rect(self.screen, self.POKER_GREEN, pygame.Rect(card[1].x, card[1].y, self.CARD_SIZE[0], self.CARD_SIZE[1]))
-                            pygame.display.flip()
-                            if card[3] == False:
-                                pygame.draw.rect(self.screen, (25,25,25), pygame.Rect(card[1].x, card[1].y, self.CARD_SIZE[0], self.CARD_SIZE[1]))
-                                x_change = 5
-                                y_change = 15
-                                card[1].x += x_change
-                                card[1].y -= y_change
-                                card[3] = True
-                            else:
-                                card[1].x -= x_change
-                                card[1].y += y_change
-                                card[3] = False
-                            self.screen.blit(card[2], card[1])
-                            pygame.display.update()
-                            mode = 2
-                            print(card)
-                    if continue_button.collidepoint(mouse_position):
-                        cards_clicked = []
-                        for card in players_cards:
-                            if card[3]:
-                                cards_clicked.append(card[0])
-                            pygame.draw.rect(self.screen, self.POKER_GREEN, pygame.Rect(card[1].x-20, card[1].y-20, self.CARD_SIZE[0]+20, self.CARD_SIZE[1]+40))
-                        pygame.display.update()
-                        time.sleep(1)
-
-                        print("ok")
-                        turn += 1
-                        if turn == len(self.players):
-                            turn = 0
-                        mode= 1
-
-            if mode == 0:
+                if self.deals == 2:
+                    game_to_play = 2
+                if game_to_play == 1:
+                    play_poker(self, event, players_cards, continue_button)
+                if game_to_play == 2:
+                    play_trick(self, event, players_cards, continue_button)
+            if self.mode == 0:
                 start_button = self.main_menu()
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     mouse_position = pygame.mouse.get_pos()
                     if start_button.collidepoint(mouse_position):
-                        mode = 1
-            if mode == 1:
+                        self.mode = 1
+                        game_to_play = 1
+                        random.shuffle(self.deck.cards)
+                        self.deck.deal_cards(self.players)
+                        hands = []
+                        chicago = dict()
+                        for player in self.players:
+                            chicago[player] = 0
+                        poker_points(self,chicago,hands)
+            if self.mode == 1:
                 self.draw_window()
-                players_cards = self.get_player_cards(self.players[turn])
+                players_cards = self.get_player_cards(self.players[self.turn])
                 continue_button = players_cards[1]
                 players_cards = players_cards[0]
         pygame.quit()
+    
+if __name__ == "__main__":
+    gui = GUI()
+    gui.main()
         
