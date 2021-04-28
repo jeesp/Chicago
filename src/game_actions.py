@@ -1,53 +1,55 @@
 import pygame
 import time
 import random
-def end_game_poker_comparison(value_comparison, score_board, hand_values):
-    if value_comparison[0] != 0:
-        score_board[value_comparison[0]] += value_comparison[1]
-        if value_comparison[2] == 0:
-            return ("Lopun pokeripisteet sai: " + value_comparison[0].name + ". Käsi: "
-                  + hand_values[value_comparison[1]].lower() + ".")
-        if value_comparison[2] == 1:
-            return ("Lopun pokeripisteet sai: " + value_comparison[0].name + ". Käsi: "
-                  + hand_values[value_comparison[1]].lower() +
+from entities.deck import Deck
+def end_game_poker_comparison(self, score_board, hand_values):
+    if self.value_comparison[0] != 0:
+        score_board[self.value_comparison[0]] += self.value_comparison[1]
+        if self.value_comparison[2] == 0:
+            return ("Lopun pokeripisteet sai: " + self.value_comparison[0].name + ". Käsi: "
+                  + hand_values[self.value_comparison[1]].lower() + ".")
+        if self.value_comparison[2] == 1:
+            return ("Lopun pokeripisteet sai: " + self.value_comparison[0].name + ". Käsi: "
+                  + hand_values[self.value_comparison[1]].lower() +
                   ". Myös toisella pelaajalla oli "
-                  + hand_values[value_comparison[1]].lower() + ".")
+                  + hand_values[self.value_comparison[1]].lower() + ".")
     else:
-        if value_comparison[2] == 2:
+        if self.value_comparison[2] == 2:
             return ("Kahdella pelaajalla oli sama käsi: "
-                  + hand_values[value_comparison[1]].lower()
+                  + hand_values[self.value_comparison[1]].lower()
                   + ". Kukaan ei saanut pisteitä.")
         else:
             return ("Kenelläkään ei ollut mitään, joten kukaan ei saanut lopun " 
                     + "pokeripisteitä.")
 
 
-def poker_points(gui, chicago, hands):
-    for player in gui.players:
+def poker_points(self):
+    hands = []
+    for player in self.players:
         hand = player.hand_value()
         hands.append((player, hand))
-    value_comparison = compare_hands(hands)
-    if value_comparison[0] != 0:
-        gui.score_board[value_comparison[0]] += value_comparison[1]
-        if value_comparison[2] == 0:
-            print("Pisteet sai: " + value_comparison[0].name + ". Käsi: "
-                  + gui.hand_values[value_comparison[1]].lower() + ".")
-        if value_comparison[2] == 1:
-            print("Pisteet sai: " + value_comparison[0].name + ". Käsi: "
-                  + gui.hand_values[value_comparison[1]].lower() +
+    self.value_comparison = compare_hands(hands)
+    if self.value_comparison[0] != 0:
+        self.score_board[self.value_comparison[0]] += self.value_comparison[1]
+        if self.value_comparison[2] == 0:
+            print("Pisteet sai: " + self.value_comparison[0].name + ". Käsi: "
+                  + self.hand_values[self.value_comparison[1]].lower() + ".")
+        if self.value_comparison[2] == 1:
+            print("Pisteet sai: " + self.value_comparison[0].name + ". Käsi: "
+                  + self.hand_values[self.value_comparison[1]].lower() +
                   ". Myös toisella pelaajalla oli "
-                  + gui.hand_values[value_comparison[1]].lower() + ".")
+                  + self.hand_values[self.value_comparison[1]].lower() + ".")
     else:
-        if value_comparison[2] == 2:
+        if self.value_comparison[2] == 2:
             print("Kahdella pelaajalla on sama käsi: "
-                  + gui.hand_values[value_comparison[1]].lower()
+                  + self.hand_values[self.value_comparison[1]].lower()
                   + ". Kukaan ei saanut pisteitä.")
         else:
             print("Kenelläkään ei ollut mitään, joten kukaan ei saanut pisteitä.")
-    for player in gui.score_board:
-        print(player.name + ": ", gui.score_board[player])
+    for player in self.score_board:
+        print(player.name + ": ", self.score_board[player])
     for hand in hands:
-        print(hand[0].name+"n käsi: ", gui.hand_values[hand[1][0]].lower())
+        print(hand[0].name+"n käsi: ", self.hand_values[hand[1][0]].lower())
 
 def play_poker(self, event, players_cards, continue_button):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -82,20 +84,20 @@ def play_poker(self, event, players_cards, continue_button):
                 pygame.display.update()
                 print(cards_clicked)
                 change_card(self, self.players[self.turn], cards_clicked)
-                time.sleep(1)
+                #time.sleep(1)
                 print("ok")
                 self.turn += 1
                 if self.turn == len(self.players):
                     self.turn = 0
-                if self.turn == self.starting_player:
-                    hands = []
+                if self.turn == self.start:
                     chicago = dict()
                     for player in self.players:
                         chicago[player] = 0
                     random.shuffle(self.deck.cards)
                     self.deck.deal_cards(self.players)
-                    poker_points(self,chicago,hands)
                     self.deals += 1
+                    if self.deals < 2:
+                        poker_points(self)
                 self.mode= 1
 
 def change_card(self, player, cards_clicked):
@@ -136,13 +138,32 @@ def play_trick(self, event, players_cards, continue_button):
                 pygame.display.update()
                 print(played_card)
                 play_card(self, self.players[self.turn], played_card)
-                time.sleep(1)
+                #time.sleep(1)
                 print("ok")
                 self.turn += 1
                 if self.turn == len(self.players):
                     self.turn = 0
+                if self.turn == self.start:
+                    if len(self.players[self.start].hand) == 0:
+                        print(self.compare_card[2])
+                        print ("loppu")
+                        self.dealing_turn += 1
+                        if self.dealing_turn == len(self.players):
+                            self.dealing_turn = 0
+                        self.deals = 0
+                        self.game_to_play = 1
+                        self.deck = Deck()
+                        random.shuffle(self.deck.cards)
+                        self.deck.deal_cards(self.players)
+                        print(self.score_board)
+                        poker_points(self)
+                    else:
+                        self.start = self.players.index(self.compare_card[2])
+                        self.compare_card = None
+                        self.turn = self.start
                 self.mode = 1
                 self.card_selected = False
+        
 #def play_trick(dealing_turn, players, score_board, chicago):
 #    start = dealing_turn
 #    compare_card = (0, 0, 0)
@@ -343,13 +364,13 @@ def compare_hands(hands):
     return (strongest_player, strongest_hand, 0)
 
 
-def round_ending(chicago, value_comparison, score_board, hand_values, players):
+def round_ending(chicago, self, score_board, hand_values, players):
     no_chicagos = True
     for player in chicago:
         if chicago[player] != 0:
             no_chicagos = False
     if no_chicagos:
-        print (end_game_poker_comparison(value_comparison, score_board, hand_values))
+        print (end_game_poker_comparison(self.value_comparison, score_board, hand_values))
     else:
         print("Kierroksella huudettiin chicago, ei pokeripisteitä.")
     for player in score_board:

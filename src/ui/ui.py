@@ -48,6 +48,8 @@ class GUI(object):
         self.card_selected = False
         self.played_cards = []
         self.compare_card = None
+        self.start = 0
+        self.value_comparison = (0,0)
 
     def draw_window(self):
         self.screen.fill(self.POKER_GREEN, (0,0, 800, 600))
@@ -101,8 +103,8 @@ class GUI(object):
         text = font.render('Aloita', True, (255,255,255))
         button_width = 100
         button_height = 50
-        start_width = self.WIDTH/2-button_width/2
-        start_height = self.HEIGHT/2-button_height/2
+        start_width = round(self.WIDTH/2-button_width/2)
+        start_height = round(self.HEIGHT/2-button_height/2)
         start_button = pygame.draw.rect(self.screen, (0,0,0), pygame.Rect(start_width, start_height, button_width, button_height))
         self.screen.blit(text, (start_width+15,start_height+15))
         pygame.display.update()
@@ -112,7 +114,7 @@ class GUI(object):
         players_cards = []
         continue_button = pygame.draw.rect(self.screen, self.POKER_GREEN, pygame.Rect(0,0, self.CARD_SIZE[0], self.CARD_SIZE[1]))
         run = True
-        game_to_play = 0
+        self.game_to_play = 0
         random.shuffle(self.deck.cards)
         self.deck.deal_cards(self.players)
         while run:
@@ -121,10 +123,17 @@ class GUI(object):
                 if event.type == pygame.QUIT:
                     run = False
                 if self.deals == 2:
-                    game_to_play = 2
-                if game_to_play == 1:
+                    self.game_to_play = 2
+                    self.turn = self.start
+                    self.deals = 3
+                    hands = []
+                    for player in self.players:
+                        hand = player.hand_value()
+                        hands.append((player, hand))
+                    self.value_comparison = compare_hands(hands)
+                if self.game_to_play == 1:
                     play_poker(self, event, players_cards, continue_button)
-                if game_to_play == 2:
+                if self.game_to_play == 2:
                     play_trick(self, event, players_cards, continue_button)
             if self.mode == 0:
                 start_button = self.main_menu()
@@ -132,14 +141,13 @@ class GUI(object):
                     mouse_position = pygame.mouse.get_pos()
                     if start_button.collidepoint(mouse_position):
                         self.mode = 1
-                        game_to_play = 1
+                        self.game_to_play = 1
                         random.shuffle(self.deck.cards)
                         self.deck.deal_cards(self.players)
-                        hands = []
                         chicago = dict()
                         for player in self.players:
                             chicago[player] = 0
-                        poker_points(self,chicago,hands)
+                        poker_points(self)
             if self.mode == 1:
                 self.draw_window()
                 players_cards = self.get_player_cards(self.players[self.turn])
