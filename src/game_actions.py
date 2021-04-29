@@ -2,21 +2,21 @@ import pygame
 import time
 import random
 from entities.deck import Deck
-def end_game_poker_comparison(self, score_board, hand_values):
+def end_game_poker_comparison(self):
     if self.value_comparison[0] != 0:
-        score_board[self.value_comparison[0]] += self.value_comparison[1]
+        self.score_board[self.value_comparison[0]] += self.value_comparison[1]
         if self.value_comparison[2] == 0:
             return ("Lopun pokeripisteet sai: " + self.value_comparison[0].name + ". Käsi: "
-                  + hand_values[self.value_comparison[1]].lower() + ".")
+                  + self.hand_values[self.value_comparison[1]].lower() + ".")
         if self.value_comparison[2] == 1:
             return ("Lopun pokeripisteet sai: " + self.value_comparison[0].name + ". Käsi: "
-                  + hand_values[self.value_comparison[1]].lower() +
+                  + self.hand_values[self.value_comparison[1]].lower() +
                   ". Myös toisella pelaajalla oli "
-                  + hand_values[self.value_comparison[1]].lower() + ".")
+                  + self.hand_values[self.value_comparison[1]].lower() + ".")
     else:
         if self.value_comparison[2] == 2:
             return ("Kahdella pelaajalla oli sama käsi: "
-                  + hand_values[self.value_comparison[1]].lower()
+                  + self.hand_values[self.value_comparison[1]].lower()
                   + ". Kukaan ei saanut pisteitä.")
         else:
             return ("Kenelläkään ei ollut mitään, joten kukaan ei saanut lopun " 
@@ -71,7 +71,7 @@ def play_poker(self, event, players_cards, continue_button):
                         card[3] = False
                     self.screen.blit(card[2], card[1])
                     pygame.display.update()
-                    self.mode = 2
+                    self.mode = 3
                     print(card)
                     print(self.turn)
             
@@ -89,7 +89,7 @@ def play_poker(self, event, players_cards, continue_button):
                 self.turn += 1
                 if self.turn == len(self.players):
                     self.turn = 0
-                if self.turn == self.start:
+                if self.turn == self.dealing_turn:
                     chicago = dict()
                     for player in self.players:
                         chicago[player] = 0
@@ -98,6 +98,16 @@ def play_poker(self, event, players_cards, continue_button):
                     self.deals += 1
                     if self.deals < 2:
                         poker_points(self)
+                    if self.deals == 2:
+                        self.game_to_play = 2
+                        self.turn = self.start
+                        self.deals = 3
+                        print(self.players[self.turn].name)
+                        hands = []
+                        for player in self.players:
+                            hand = player.hand_value()
+                            hands.append((player, hand))
+                        self.value_comparison = compare_hands(hands)
                 self.mode= 1
 
 def change_card(self, player, cards_clicked):
@@ -126,7 +136,7 @@ def play_trick(self, event, players_cards, continue_button):
                         self.card_selected = False
                     self.screen.blit(card[2], card[1])
                     pygame.display.update()
-                    self.mode = 2
+                    self.mode = 3
                     print(card)
             
             if continue_button.collidepoint(mouse_position) and self.card_selected:
@@ -140,6 +150,7 @@ def play_trick(self, event, players_cards, continue_button):
                 play_card(self, self.players[self.turn], played_card)
                 #time.sleep(1)
                 print("ok")
+                
                 self.turn += 1
                 if self.turn == len(self.players):
                     self.turn = 0
@@ -153,15 +164,39 @@ def play_trick(self, event, players_cards, continue_button):
                         self.deals = 0
                         self.game_to_play = 1
                         self.deck = Deck()
+                        self.start = self.dealing_turn
+                        self.turn = self.dealing_turn
                         random.shuffle(self.deck.cards)
                         self.deck.deal_cards(self.players)
-                        print(self.score_board)
-                        poker_points(self)
+                        chicago_on = False
+                        chicago_successful = False
+                        chicago_player = None
+                        blanco_is_on = False
+                        end_trick(self, chicago_on, chicago_successful, chicago_player, blanco_is_on)
+                        chicago = dict()
+                        for player in self.players:
+                            chicago[player] = 0
+                        if round_ending(self, chicago):
+                            self.mode = 2
+                            self.turn = 0
+                            self.card_selected = False
+                            self.played_cards = []
+                            self.compare_card = None
+                            self.start = 0
+                            self.value_comparison = (0,0)
+                            self.dealing_turn = 0
+                            self.starting_player = 0
+                        else:
+                            poker_points(self)
+                        
                     else:
                         self.start = self.players.index(self.compare_card[2])
                         self.compare_card = None
                         self.turn = self.start
-                self.mode = 1
+                if self.game_to_play == 2:
+                    print(self.players[self.turn].name)
+                if self.mode == 3:
+                    self.mode = 1
                 self.card_selected = False
         
 #def play_trick(dealing_turn, players, score_board, chicago):
@@ -237,34 +272,33 @@ def trick_no_chicago_first_round(players, start, no_chicago, chicago, played_car
             turn = 0
 
 
-def end_trick(chicago_on, chicago_successful, chicago_player, blanco_is_on,
-              compare_card, score_board):
+def end_trick(self, chicago_on, chicago_successful, chicago_player, blanco_is_on):
     if chicago_on:
         if chicago_successful:
             if blanco_is_on:
-                score_board[compare_card[2]] += 30
-                print(compare_card[2].name +
+                self.score_board[self.compare_card[2]] += 30
+                print(self.compare_card[2].name +
                       " sai läpi onnistuneesti blanco-chicagon.")
             else:
-                score_board[compare_card[2]] += 15
-                print(compare_card[2].name +
+                self.score_board[self.compare_card[2]] += 15
+                print(self.compare_card[2].name +
                       " sai läpi onnistuneesti chicagon.")
         else:
-            score_board[compare_card[2]] += 5
-            print(compare_card[2].name + " sai lopetuksen ja " + chicago_player.name
+            self.score_board[self.compare_card[2]] += 5
+            print(self.compare_card[2].name + " sai lopetuksen ja " + chicago_player.name
                   + "n chicago meni pieleen.")
             if blanco_is_on:
-                score_board[chicago_player] -= 30
+                self.score_board[chicago_player] -= 30
             else:
-                score_board[chicago_player] -= 15
+                self.score_board[chicago_player] -= 15
     else:
-        if compare_card[0] == 2:
-            score_board[compare_card[2]] += 10
+        if self.compare_card[0] == 2:
+            self.score_board[self.compare_card[2]] += 10
             print("Kierroksen lopetti " +
-                  compare_card[2].name + " kakkoslopetuksella")
+                  self.compare_card[2].name + " kakkoslopetuksella")
         else:
-            score_board[compare_card[2]] += 5
-            print("Kierroksen lopetti " + compare_card[2].name)
+            self.score_board[self.compare_card[2]] += 5
+            print("Kierroksen lopetti " + self.compare_card[2].name)
 
 
 def set_compare_card(self, player, card):
@@ -316,12 +350,6 @@ def play_card(self, player, played_card):
             playable_cards.append(card)
     if len(playable_cards) == 0:
         playable_cards = player.hand
-    while i < len(player.hand):
-        if player.hand[i] in playable_cards:
-            print(str(i) + ": " + player.hand[i][2])
-        else:
-            print("X: " + player.hand[i][2])
-        i += 1
     player.hand.remove(played_card)
     self.played_cards.append((player, played_card))
     print(played_card)
@@ -364,40 +392,43 @@ def compare_hands(hands):
     return (strongest_player, strongest_hand, 0)
 
 
-def round_ending(chicago, self, score_board, hand_values, players):
+def round_ending(self, chicago):
     no_chicagos = True
     for player in chicago:
         if chicago[player] != 0:
             no_chicagos = False
     if no_chicagos:
-        print (end_game_poker_comparison(self.value_comparison, score_board, hand_values))
+        print (end_game_poker_comparison(self))
     else:
         print("Kierroksella huudettiin chicago, ei pokeripisteitä.")
-    for player in score_board:
-        print(player.name + ": ", score_board[player])
+    for player in self.score_board:
+        print(player.name + ": ", self.score_board[player])
     points = []
-    for player in players:
-        points.append(score_board[player])
+    for player in self.players:
+        points.append(self.score_board[player])
     points.sort()
-    if points_check(points, score_board, players):
+    if points_check(self, points):
         return True
+    print("")    
+    print("Uusi kierros.")
+    print("")
     return False
 
 
-def points_check(points, score_board, players):
-    if points[len(points)-1] >= 10:
+def points_check(self, points):
+    if points[len(points)-1] >= 5:
         if points[len(points)-1] > points[len(points)-2]:
-            for player in players:
-                if score_board[player] == points[len(points)-1]:
-                    print("Peli päättynyt!")
-                    print("Voittaja on: " + player.name + ". Pisteet: "
+            for player in self.players:
+                if self.score_board[player] == points[len(points)-1]:
+                    self.winningtext.append("Peli päättynyt!")
+                    self.winningtext.append("Voittaja on: " + player.name + ". Pisteet: "
                           + str(points[len(points)-1]))
         if points[len(points)-1] == points[len(points)-2]:
-            print("Pisteraja ylitetty, mutta osalla pelaajista on tasatilanne.")
-            print("Pelaajat tasatilanteessa: ", end=" ")
-            for player in players:
-                if score_board[player] == points[len(points)-1]:
-                    print(player.name + " ", end=" ")
-            print("Pisteillä: " + str(points[len(points)-1]))
+            self.winningtext.append("Pisteraja ylitetty, mutta osalla pelaajista on tasatilanne.")
+            self.winningtext.append("Pelaajat tasatilanteessa: ", end=" ")
+            for player in self.players:
+                if self.score_board[player] == points[len(points)-1]:
+                    self.winningtext.append(player.name + " ", end=" ")
+            self.winningtext.append("Pisteillä: " + str(points[len(points)-1]))
         return True
     return False

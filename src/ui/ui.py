@@ -11,26 +11,24 @@ from game_actions import play_poker, play_trick, compare_hands, round_ending, po
 
 class GUI(object):
     def __init__(self):
-        players = []
+        self.players = []
         player1 = Player('Ake')
-        players.append(player1)
+        self.players.append(player1)
         player2 = Player('Make')
-        players.append(player2)
+        self.players.append(player2)
         player3 = Player('Jake')
-        players.append(player3)
+        self.players.append(player3)
         player4 = Player('Åke')
-        players.append(player4)
+        self.players.append(player4)
         self.score_board = dict()
-        for player in players:
+        for player in self.players:
             self.score_board[player] = 0
         self.hand_values = {0: "Ei mitään", 1: "Pari", 2: "Kaksi paria", 3: "Kolmoset", 4: "Suora",
                        5: "Väri", 6: "Täyskäsi", 8: "Neloset", 10: "Värisuora"}
         self.deals = 0
         self.dealing_turn = 0
         self.starting_player = 0
-        deck = Deck()
-        self.players = players
-        self.deck = deck
+        self.deck = Deck()
         pygame.init()
         pygame.display.set_caption('Chicago')
         self.WIDTH = 800
@@ -50,6 +48,7 @@ class GUI(object):
         self.compare_card = None
         self.start = 0
         self.value_comparison = (0,0)
+        self.winningtext = []
 
     def draw_window(self):
         self.screen.fill(self.POKER_GREEN, (0,0, 800, 600))
@@ -97,22 +96,38 @@ class GUI(object):
         pygame.display.update()
         return players_cards_as_rects, continue_button
     def main_menu(self):
+        menu_object = self.create_menu_button("Aloita")
+        pygame.draw.rect(self.screen, (0,0,0), menu_object[2])
+        self.screen.blit(menu_object[1], menu_object[3])
+        pygame.display.flip()
+        return menu_object[2]
+    def end_menu(self):
+        menu_object = self.create_menu_button("Uusi peli")
+        newspace = 100
+        for winningtext in self.winningtext:
+            winning_text_line = menu_object[0].render(winningtext, True, (255,255,255))
+            newline_rect = winning_text_line.get_rect(center=(menu_object[2].center))
+            newline_rect.y += newspace
+            newspace += 20
+            self.screen.blit(winning_text_line, newline_rect)
+        pygame.draw.rect(self.screen, (0,0,0), menu_object[2])
+        self.screen.blit(menu_object[1], menu_object[3])
+        pygame.display.flip()
+        return menu_object[2]
+    def create_menu_button(self, button_text):
         self.screen.fill(self.POKER_GREEN, (0,0, 800, 600))
-        font_size = 35
-        font = pygame.font.SysFont('Ariel', font_size)
-        text = font.render('Aloita', True, (255,255,255))
+        font = pygame.font.Font(None, 25)
+        text = font.render(button_text, True, (255,255,255))
         button_width = 100
         button_height = 50
-        start_width = round(self.WIDTH/2-button_width/2)
-        start_height = round(self.HEIGHT/2-button_height/2)
-        start_button = pygame.draw.rect(self.screen, (0,0,0), pygame.Rect(start_width, start_height, button_width, button_height))
-        self.screen.blit(text, (start_width+15,start_height+15))
-        pygame.display.update()
-        return start_button
+        new_game_button = pygame.Rect(self.WIDTH/2, self.HEIGHT/2, button_width, button_height)
+        new_game_button.center = (self.WIDTH/2, self.HEIGHT/2)
+        text_rect = text.get_rect(center=(new_game_button.center))
+        return (font, text, new_game_button, text_rect)
     def main(self):
         clock = pygame.time.Clock()
         players_cards = []
-        continue_button = pygame.draw.rect(self.screen, self.POKER_GREEN, pygame.Rect(0,0, self.CARD_SIZE[0], self.CARD_SIZE[1]))
+        continue_button = 0
         run = True
         self.game_to_play = 0
         random.shuffle(self.deck.cards)
@@ -122,15 +137,6 @@ class GUI(object):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
-                if self.deals == 2:
-                    self.game_to_play = 2
-                    self.turn = self.start
-                    self.deals = 3
-                    hands = []
-                    for player in self.players:
-                        hand = player.hand_value()
-                        hands.append((player, hand))
-                    self.value_comparison = compare_hands(hands)
                 if self.game_to_play == 1:
                     play_poker(self, event, players_cards, continue_button)
                 if self.game_to_play == 2:
@@ -144,15 +150,38 @@ class GUI(object):
                         self.game_to_play = 1
                         random.shuffle(self.deck.cards)
                         self.deck.deal_cards(self.players)
-                        chicago = dict()
-                        for player in self.players:
-                            chicago[player] = 0
                         poker_points(self)
             if self.mode == 1:
                 self.draw_window()
                 players_cards = self.get_player_cards(self.players[self.turn])
                 continue_button = players_cards[1]
                 players_cards = players_cards[0]
+            if self.mode == 2:
+                start_button = self.end_menu()
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    mouse_position = pygame.mouse.get_pos()
+                    if start_button.collidepoint(mouse_position):
+                        print("")
+                        print("Uusi peli aloitettu")
+                        print("")
+                        self.winningtext = []
+                        self.players = []
+                        player1 = Player('Ake')
+                        self.players.append(player1)
+                        player2 = Player('Make')
+                        self.players.append(player2)
+                        player3 = Player('Jake')
+                        self.players.append(player3)
+                        player4 = Player('Åke')
+                        self.players.append(player4)
+                        self.score_board = dict()
+                        for player in self.players:
+                            self.score_board[player] = 0
+                        self.mode = 1
+                        self.game_to_play = 1
+                        random.shuffle(self.deck.cards)
+                        self.deck.deal_cards(self.players)
+                        poker_points(self)
         pygame.quit()
     
 if __name__ == "__main__":
