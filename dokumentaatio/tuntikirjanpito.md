@@ -18,5 +18,6 @@
 | 23.4 | 1 | Sekvenssikaavion tekeminen, testien lisääminen|
 | 28.4 | 4 | Sovelluksen liittämistä graafiseen käyttöliittymään|
 | 28.4 | 2 | GUI:n ja sovelluslogiikan yhdistämistä |
-| Yht. | 58 | |
+| 29.4 | 4 | Aloitus- ja lopetusnäkymien luominen, uuden kierroksen mahdollisuus luotu|
+| Yht. | 62 | |
 
