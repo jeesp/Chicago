@@ -1,8 +1,8 @@
 import unittest
 from entities.player import Player
 from entities.deck import Deck
-from game_actions import end_game_poker_comparison, play_poker, play_trick, compare_hands, end_trick, set_compare_card
-from game_actions import play_card, round_ending, set_up_players, set_up_scoreboard, change_card, poker_points
+from game_logic.game_actions import end_game_poker_comparison, play_poker, play_trick, compare_hands, end_trick, set_compare_card
+from game_logic.game_actions import play_card, round_ending, set_up_players, set_up_scoreboard, change_card, poker_points
 
 
 class TestPlayer(unittest.TestCase):
