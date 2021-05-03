@@ -30,11 +30,13 @@ Sovelluslogiikka
 - [x] Chicago
 - [x] Blanco-chicago
 - [x] Graafinen käyttöliittymä 1. pokerinäkymä
-- [ ] Graafinen käyttöliittymä 2. vaihtonäkymä
-- [ ] Graafinen käyttöliittymä tikkinäkymä
+- [x] Graafinen käyttöliittymä 2. vaihtonäkymä
+- [x] Graafinen käyttöliittymä tikkinäkymä
 - [ ] Graafinen käyttöliittymä tulostaulu
-- [ ] Graafisen käyttöliittymän liittäminen osaksi sovellusta
-- [ ] Graafinen käyttöliittymä alkunäkymä
-- [ ] Graafinen käyttöliittymä lopetusnäkymä
+- [/] Graafisen käyttöliittymän liittäminen osaksi sovellusta
+- [x] Graafinen käyttöliittymä alkunäkymä
+- [x] Graafinen käyttöliittymä lopetusnäkymä
 - [ ] Graafinen käyttöliittymä pelaajien nimien syöttäminen
+- [ ] Chicago graafisessa käyttöliittymässä
+- [ ] Blancochicago graafisessa käyttöliittymässä
 
