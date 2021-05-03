@@ -14,12 +14,11 @@ class Player:
             numbers.append(card[0])
             suits.add(card[1])
         numbers.sort()
-        if Player.check_straight_and_flush(self, suits, numbers) is not None:
-            return Player.check_straight_and_flush(self, suits, numbers)
-        if Player.check_same_numbers(self, numbers) is not None:
-            return Player.check_same_numbers(self, numbers)
+        if self.check_straight_and_flush(suits, numbers) is not None:
+            return self.check_straight_and_flush(suits, numbers)
+        if self.check_same_numbers(numbers) is not None:
+            return self.check_same_numbers(numbers)
         return (0, 0)
-
     def check_same_numbers(self, numbers):
         same_numbers = dict()
         for i in range(0, 5):
@@ -47,7 +46,6 @@ class Player:
             return Player.check_pairs_and_three_of_a_kind(self, same_numbers,
                                                           three_of_a_kind, two_pairs, pair)
         return None
-
     def check_pairs_and_three_of_a_kind(self, same_numbers, three_of_a_kind, two_pairs, pair):
         if three_of_a_kind:
             for number in same_numbers:
@@ -74,10 +72,11 @@ class Player:
                 numbers.sort()
                 i = 1
                 while i < len(numbers):
-                    if numbers[i] - numbers[i-1] != 1 and (numbers[i] != 14 or numbers[i] != 10):
-                        straight = False
-                        numbers.remove(1)
-                        break
+                    if numbers[i] - numbers[i-1] != 1:
+                        if numbers[i] != 14 and numbers[i-1] != 1:
+                            straight = False
+                            del numbers[0]
+                            break
                     i += 1
         else:
             for i in range(1, 5):

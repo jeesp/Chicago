@@ -20,5 +20,6 @@
 | 28.4 | 2 | GUI:n ja sovelluslogiikan yhdistämistä |
 | 29.4 | 4 | Aloitus- ja lopetusnäkymien luominen, uuden kierroksen mahdollisuus luotu|
 | 30.4 | 2 | Graafisen käyttöliittymän jakamista eri tiedostoihin, testien lisäämistä|
-| Yht. | 64 | |
+| 3.5 | 2 | Testien lisäämistä, metodien siistimistä |
+| Yht. | 66 | |
 

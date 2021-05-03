@@ -1,6 +1,6 @@
-import pygame
 import time
 import random
+import pygame
 from entities.deck import Deck
 from entities.player import Player
 def end_game_poker_comparison(self):
@@ -14,14 +14,12 @@ def end_game_poker_comparison(self):
                   + self.hand_values[self.value_comparison[1]].lower() +
                   ". Myös toisella pelaajalla oli "
                   + self.hand_values[self.value_comparison[1]].lower() + ".")
-    else:
-        if self.value_comparison[2] == 2:
-            return ("Kahdella pelaajalla oli sama käsi: "
-                  + self.hand_values[self.value_comparison[1]].lower()
-                  + ". Kukaan ei saanut pisteitä.")
-        else:
-            return ("Kenelläkään ei ollut mitään, joten kukaan ei saanut lopun " 
-                    + "pokeripisteitä.")
+    if self.value_comparison[2] == 2:
+        return ("Kahdella pelaajalla oli sama käsi: "
+              + self.hand_values[self.value_comparison[1]].lower()
+              + ". Kukaan ei saanut pisteitä.")
+    return ("Kenelläkään ei ollut mitään, joten kukaan ei saanut lopun "
+            + "pokeripisteitä.")
 def set_up_players(self):
     self.players = []
     player1 = Player('Ake')
@@ -38,176 +36,184 @@ def set_up_scoreboard(self):
         self.scoreboard[player] = 0
 def poker_points(self):
     hands = []
+    lines_to_print = []
     for player in self.players:
         hand = player.hand_value()
         hands.append((player, hand))
     self.value_comparison = compare_hands(hands)
     if self.value_comparison[0] != 0:
         self.scoreboard[self.value_comparison[0]] += self.value_comparison[1]
+        
         if self.value_comparison[2] == 0:
-            print("Pisteet sai: " + self.value_comparison[0].name + ". Käsi: "
-                  + self.hand_values[self.value_comparison[1]].lower() + ".")
+            rivi = str("Pisteet sai: " + self.value_comparison[0].name + ". Käsi: " 
+            + self.hand_values[self.value_comparison[1]].lower() + ".")
+            lines_to_print.append(rivi)
         if self.value_comparison[2] == 1:
-            print("Pisteet sai: " + self.value_comparison[0].name + ". Käsi: "
-                  + self.hand_values[self.value_comparison[1]].lower() +
-                  ". Myös toisella pelaajalla oli "
-                  + self.hand_values[self.value_comparison[1]].lower() + ".")
+            rivi = str("Pisteet sai: " + self.value_comparison[0].name + ". Käsi: "
+            + self.hand_values[self.value_comparison[1]].lower()
+            + ". Myös toisella pelaajalla oli "
+            + self.hand_values[self.value_comparison[1]].lower() + ".")
+            lines_to_print.append(rivi)
+    elif self.value_comparison[2] == 2:
+        rivi = str("Kahdella pelaajalla on sama käsi: "
+        + self.hand_values[self.value_comparison[1]].lower()
+        + ". Kukaan ei saanut pisteitä.")
+        lines_to_print.append(rivi)
     else:
-        if self.value_comparison[2] == 2:
-            print("Kahdella pelaajalla on sama käsi: "
-                  + self.hand_values[self.value_comparison[1]].lower()
-                  + ". Kukaan ei saanut pisteitä.")
-        else:
-            print("Kenelläkään ei ollut mitään, joten kukaan ei saanut pisteitä.")
+        lines_to_print.append("Kenelläkään ei ollut mitään, joten kukaan ei saanut pisteitä.")
     for player in self.scoreboard:
-        print(player.name + ": ", self.scoreboard[player])
+        rivi = str(player.name) + ": " + str(self.scoreboard[player])
+        lines_to_print.append(rivi)
     for hand in hands:
-        print(hand[0].name+"n käsi: ", self.hand_values[hand[1][0]].lower())
+        rivi = str(hand[0].name)+"n käsi: " + str(self.hand_values[hand[1][0]].lower())
+        lines_to_print.append(rivi)
+    return lines_to_print
 def play_poker(self, event, players_cards, continue_button):
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            mouse_position = pygame.mouse.get_pos()
-            for card in players_cards:
-                if card[1].collidepoint(mouse_position):
-                    pygame.draw.rect(self.screen, self.POKER_GREEN, pygame.Rect(card[1].x, card[1].y, self.CARD_SIZE[0], self.CARD_SIZE[1]))
-                    pygame.display.flip()
-                    x_change = 5
-                    y_change = 15
-                    if card[3] == False:
-                        pygame.draw.rect(self.screen, (25,25,25), pygame.Rect(card[1].x, card[1].y, self.CARD_SIZE[0], self.CARD_SIZE[1]))
-                        card[1].x += x_change
-                        card[1].y -= y_change
-                        card[3] = True
-                    else:
-                        card[1].x -= x_change
-                        card[1].y += y_change
-                        card[3] = False
-                    self.screen.blit(card[2], card[1])
-                    pygame.display.update()
-                    self.mode = 3
-                    print(card)
-                    print(self.turn)      
-            if continue_button.collidepoint(mouse_position):
-                cards_clicked = []
-                for card in players_cards:
-                    if card[3]:
-                        cards_clicked.append(card[0])
-                    pygame.draw.rect(self.screen, self.POKER_GREEN, pygame.Rect(card[1].x-20, card[1].y-20, self.CARD_SIZE[0]+20, self.CARD_SIZE[1]+40))
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        mouse_position = pygame.mouse.get_pos()
+        for card in players_cards:
+            if card[1].collidepoint(mouse_position):
+                pygame.draw.rect(self.screen, self.POKER_GREEN, pygame.Rect(card[1].x,
+                card[1].y, self.CARD_SIZE[0], self.CARD_SIZE[1]))
+                pygame.display.flip()
+                x_change = 5
+                y_change = 15
+                if card[3] == False:
+                    pygame.draw.rect(self.screen, (25,25,25), pygame.Rect(card[1].x,
+                    card[1].y, self.CARD_SIZE[0], self.CARD_SIZE[1]))
+                    card[1].x += x_change
+                    card[1].y -= y_change
+                    card[3] = True
+                else:
+                    card[1].x -= x_change
+                    card[1].y += y_change
+                    card[3] = False
+                self.screen.blit(card[2], card[1])
                 pygame.display.update()
-                print(cards_clicked)
-                change_card(self, self.players[self.turn], cards_clicked)
-                #time.sleep(1)
-                print("ok")
-                self.turn += 1
-                if self.turn == len(self.players):
-                    self.turn = 0
-                if self.turn == self.dealing_turn:
-                    chicago = dict()
+                self.mode = 3
+                print(card)
+                print(self.turn)
+        if continue_button.collidepoint(mouse_position):
+            cards_clicked = []
+            for card in players_cards:
+                if card[3]:
+                    cards_clicked.append(card[0])
+                pygame.draw.rect(self.screen, self.POKER_GREEN, pygame.Rect(card[1].x-20,
+                card[1].y-20, self.CARD_SIZE[0]+20, self.CARD_SIZE[1]+40))
+            pygame.display.update()
+            print(cards_clicked)
+            change_card(self, self.players[self.turn], cards_clicked)
+            print("ok")
+            self.turn += 1
+            if self.turn == len(self.players):
+                self.turn = 0
+            if self.turn == self.dealing_turn:
+                chicago = dict()
+                for player in self.players:
+                    chicago[player] = 0
+                random.shuffle(self.deck.cards)
+                self.deck.deal_cards(self.players)
+                self.deals += 1
+                if self.deals < 2:
+                    print(poker_points(self))
+                if self.deals == 2:
+                    self.game_to_play = 2
+                    self.turn = self.start
+                    self.deals = 3
+                    print(self.players[self.turn].name)
+                    hands = []
                     for player in self.players:
-                        chicago[player] = 0
-                    random.shuffle(self.deck.cards)
-                    self.deck.deal_cards(self.players)
-                    self.deals += 1
-                    if self.deals < 2:
-                        poker_points(self)
-                    if self.deals == 2:
-                        self.game_to_play = 2
-                        self.turn = self.start
-                        self.deals = 3
-                        print(self.players[self.turn].name)
-                        hands = []
-                        for player in self.players:
-                            hand = player.hand_value()
-                            hands.append((player, hand))
-                        self.value_comparison = compare_hands(hands)
-                self.mode= 1
+                        hand = player.hand_value()
+                        hands.append((player, hand))
+                    self.value_comparison = compare_hands(hands)
+            self.mode= 1
 def change_card(self, player, cards_clicked):
     for card in cards_clicked:
         self.deck.add_card_to_dealt_cards(card)
         player.remove_card(card)
 def play_trick(self, event, players_cards, continue_button):
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            mouse_position = pygame.mouse.get_pos()
-            for card in players_cards:
-                if card[1].collidepoint(mouse_position):
-                    pygame.draw.rect(self.screen, self.POKER_GREEN, pygame.Rect(card[1].x, card[1].y, self.CARD_SIZE[0], self.CARD_SIZE[1]))
-                    pygame.display.flip()
-                    x_change = 5
-                    y_change = 15
-                    if card[3] == False and self.card_selected == False:
-                        pygame.draw.rect(self.screen, (25,25,25), pygame.Rect(card[1].x, card[1].y, self.CARD_SIZE[0], self.CARD_SIZE[1]))
-                        card[1].x += x_change
-                        card[1].y -= y_change
-                        card[3] = True
-                        self.card_selected = True
-                    elif card[3] == True and self.card_selected == True:
-                        card[1].x -= x_change
-                        card[1].y += y_change
-                        card[3] = False
-                        self.card_selected = False
-                    self.screen.blit(card[2], card[1])
-                    pygame.display.update()
-                    self.mode = 3
-                    print(card)
-            
-            if continue_button.collidepoint(mouse_position) and self.card_selected:
-                played_card = (0,0,0)
-                for card in players_cards:
-                    if card[3]:
-                        played_card = card[0]
-                    pygame.draw.rect(self.screen, self.POKER_GREEN, pygame.Rect(card[1].x-20, card[1].y-20, self.CARD_SIZE[0]+20, self.CARD_SIZE[1]+40))
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        mouse_position = pygame.mouse.get_pos()
+        for card in players_cards:
+            if card[1].collidepoint(mouse_position):
+                pygame.draw.rect(self.screen, self.POKER_GREEN, pygame.Rect(card[1].x,
+                card[1].y, self.CARD_SIZE[0], self.CARD_SIZE[1]))
+                pygame.display.flip()
+                x_change = 5
+                y_change = 15
+                if card[3] == False and self.card_selected == False:
+                    pygame.draw.rect(self.screen, (25,25,25), pygame.Rect(card[1].x,
+                    card[1].y, self.CARD_SIZE[0], self.CARD_SIZE[1]))
+                    card[1].x += x_change
+                    card[1].y -= y_change
+                    card[3] = True
+                    self.card_selected = True
+                elif card[3] == True and self.card_selected == True:
+                    card[1].x -= x_change
+                    card[1].y += y_change
+                    card[3] = False
+                    self.card_selected = False
+                self.screen.blit(card[2], card[1])
                 pygame.display.update()
-                print(played_card)
-                play_card(self, self.players[self.turn], played_card)
-                #time.sleep(1)
-                print("ok")
-                
-                self.turn += 1
-                if self.turn == len(self.players):
-                    self.turn = 0
-                if self.turn == self.start:
-                    if len(self.players[self.start].hand) == 0:
-                        print(self.compare_card[2])
-                        print ("loppu")
-                        self.dealing_turn += 1
-                        if self.dealing_turn == len(self.players):
-                            self.dealing_turn = 0
-                        self.deals = 0
-                        self.game_to_play = 1
-                        self.deck = Deck()
-                        self.start = self.dealing_turn
-                        self.turn = self.dealing_turn
-                        random.shuffle(self.deck.cards)
-                        self.deck.deal_cards(self.players)
-                        chicago_on = False
-                        chicago_successful = False
-                        chicago_player = None
-                        blanco_is_on = False
-                        end_trick(self, chicago_on, chicago_successful, chicago_player, blanco_is_on)
-                        chicago = dict()
-                        for player in self.players:
-                            chicago[player] = 0
-                        if round_ending(self, chicago):
-                            self.mode = 2
-                            self.turn = 0
-                            self.card_selected = False
-                            self.played_cards = []
-                            self.compare_card = None
-                            self.start = 0
-                            self.value_comparison = (0,0)
-                            self.dealing_turn = 0
-                            self.starting_player = 0
-                        else:
-                            poker_points(self)
-                        
-                    else:
-                        self.start = self.players.index(self.compare_card[2])
+                self.mode = 3
+                print(card)
+        if continue_button.collidepoint(mouse_position) and self.card_selected:
+            played_card = (0,0,0)
+            for card in players_cards:
+                if card[3]:
+                    played_card = card[0]
+                pygame.draw.rect(self.screen, self.POKER_GREEN, pygame.Rect(card[1].x-20,
+                card[1].y-20, self.CARD_SIZE[0]+20, self.CARD_SIZE[1]+40))
+            pygame.display.update()
+            print(played_card)
+            play_card(self, self.players[self.turn], played_card)
+            print("ok")
+            self.turn += 1
+            if self.turn == len(self.players):
+                self.turn = 0
+            if self.turn == self.start:
+                if len(self.players[self.start].hand) == 0:
+                    print(self.compare_card[2])
+                    print ("loppu")
+                    self.dealing_turn += 1
+                    if self.dealing_turn == len(self.players):
+                        self.dealing_turn = 0
+                    self.deals = 0
+                    self.game_to_play = 1
+                    self.deck = Deck()
+                    self.start = self.dealing_turn
+                    self.turn = self.dealing_turn
+                    random.shuffle(self.deck.cards)
+                    self.deck.deal_cards(self.players)
+                    chicago_on = False
+                    chicago_successful = False
+                    chicago_player = None
+                    blanco_is_on = False
+                    end_trick(self, chicago_on, chicago_successful, chicago_player, blanco_is_on)
+                    chicago = dict()
+                    for player in self.players:
+                        chicago[player] = 0
+                    if round_ending(self, chicago):
+                        self.mode = 2
+                        self.turn = 0
+                        self.card_selected = False
+                        self.played_cards = []
                         self.compare_card = None
-                        self.turn = self.start
-                if self.game_to_play == 2:
-                    print(self.players[self.turn].name)
-                if self.mode == 3:
-                    self.mode = 1
-                self.card_selected = False    
+                        self.start = 0
+                        self.value_comparison = (0,0)
+                        self.dealing_turn = 0
+                        self.starting_player = 0
+                    else:
+                        print(poker_points(self))
+                else:
+                    self.start = self.players.index(self.compare_card[2])
+                    self.compare_card = None
+                    self.turn = self.start
+            if self.game_to_play == 2:
+                print(self.players[self.turn].name)
+            if self.mode == 3:
+                self.mode = 1
+            self.card_selected = False
 #def play_trick(dealing_turn, players, scoreboard, chicago):
 #    start = dealing_turn
 #    compare_card = (0, 0, 0)
@@ -408,7 +414,7 @@ def round_ending(self, chicago):
     points.sort()
     if points_check(self, points):
         return True
-    print("")    
+    print("")
     print("Uusi kierros.")
     print("")
     return False
@@ -444,4 +450,4 @@ def menu_actions(self, event, button):
             self.game_to_play = 1
             random.shuffle(self.deck.cards)
             self.deck.deal_cards(self.players)
-            poker_points(self)
+            print(poker_points(self))

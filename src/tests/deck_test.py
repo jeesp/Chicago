@@ -21,7 +21,7 @@ class TestDeck(unittest.TestCase):
                 cards.append((number, suit, number_string+"_of_"+suit))
         self.assertEqual(len(self.deck.cards), len(cards))
         self.assertEqual(len(self.deck.dealt_cards), 0)
-
+    
     def test_dealing_card(self):
         players = []
         players.append(self.player)

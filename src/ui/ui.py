@@ -2,8 +2,8 @@ import pygame
 import os, sys
 import time
 import random
-from menu_ui import start_menu, end_menu, create_menu_button
-from gameplay_ui import draw_window, get_player_cards
+from ui.menu_ui import start_menu, end_menu, create_menu_button
+from ui.gameplay_ui import draw_window, get_player_cards
 PACKAGE_PARENT = '..'
 SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
 sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
@@ -73,8 +73,4 @@ class GUI(object):
                 button = end_menu(self)
                 menu_actions(self, event, button)
         pygame.quit()
-    
-if __name__ == "__main__":
-    gui = GUI()
-    gui.main()
         
