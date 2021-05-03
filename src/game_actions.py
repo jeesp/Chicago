@@ -91,19 +91,17 @@ def play_poker(self, event, players_cards, continue_button):
                 self.screen.blit(card[2], card[1])
                 pygame.display.update()
                 self.mode = 3
-                print(card)
-                print(self.turn)
         if continue_button.collidepoint(mouse_position):
             cards_clicked = []
+            
+            pygame.display.flip()
             for card in players_cards:
                 if card[3]:
                     cards_clicked.append(card[0])
                 pygame.draw.rect(self.screen, self.POKER_GREEN, pygame.Rect(card[1].x-20,
                 card[1].y-20, self.CARD_SIZE[0]+20, self.CARD_SIZE[1]+40))
             pygame.display.update()
-            print(cards_clicked)
             change_card(self, self.players[self.turn], cards_clicked)
-            print("ok")
             self.turn += 1
             if self.turn == len(self.players):
                 self.turn = 0

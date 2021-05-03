@@ -25,6 +25,10 @@ def draw_window(self):
         right_player_height += space_between
         top_player_width += space_between
 def get_player_cards(self, player):
+    font = pygame.font.Font(None, 25)
+    text = font.render("Vuorossa " + self.players[self.turn].name, True, (255,255,255))
+    text_rect = text.get_rect(center=(self.WIDTH/2, self.HEIGHT/2-100))
+    self.screen.blit(text, text_rect)
     players_cards_as_rects = []
     space_between = 20
     player_card_width = round(self.WIDTH/2 - (2*self.CARD_SIZE[0] + self.CARD_SIZE[0]/2 + 2*space_between))
@@ -38,10 +42,11 @@ def get_player_cards(self, player):
         self.screen.blit(PLAYER_CARD, card_rect)
         players_cards_as_rects.append([card, card_rect, PLAYER_CARD, False])
         player_card_width += self.CARD_SIZE[0] + space_between
-    font = pygame.font.SysFont('Ariel', 35)
     text = font.render('Jatka', True, (255,255,255))
     continue_button = pygame.Rect(680, 510, 100, 50)
+    
     pygame.draw.rect(self.screen, (0,0,0), continue_button)
-    self.screen.blit(text, (695,525))
+    text_rect = text.get_rect(center=(continue_button.center))
+    self.screen.blit(text, text_rect)
     pygame.display.update()
     return players_cards_as_rects, continue_button
