@@ -7,7 +7,7 @@ Sovelluksen toimintaa on testattu Python-versiolla 3.6.0. Vanhempien Python-vers
 
 <h3> Linkki Github-releaseen </h3>
 
-[Release](https://github.com/jeesp/ot-harjoitustyo/releases/tag/viikko5)
+[Release](https://github.com/jeesp/ot-harjoitustyo/releases/tag/viikko6)
 
 <h3> Dokumentaatio </h3>
 
