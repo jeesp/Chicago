@@ -1,11 +1,18 @@
+"""
+Luokka pelaajalle. Pelaajalla on nimi ja käsi.
+"""
 class Player:
     def __init__(self, name):
         self.name = name
         self.hand = []
-
+    """
+    Metodi poistaa kortin pelaajan kädestä.
+    """
     def remove_card(self, card):
         self.hand.remove(card)
-
+    """
+    Metodi laskee pelaajan käden arvon.
+    """
     def hand_value(self):
         player = self
         suits = set()
@@ -19,6 +26,9 @@ class Player:
         if self.check_same_numbers(numbers) is not None:
             return self.check_same_numbers(numbers)
         return (0, 0)
+    """
+    Metodi tarkistaa onko kädessä arvoltaan samoja kortteja.
+    """
     def check_same_numbers(self, numbers):
         same_numbers = dict()
         for i in range(0, 5):
@@ -46,6 +56,9 @@ class Player:
             return Player.check_pairs_and_three_of_a_kind(self, same_numbers,
                                                           three_of_a_kind, two_pairs, pair)
         return None
+    """
+    Metodi tarkistaa parit ja kolmoset.
+    """
     def check_pairs_and_three_of_a_kind(self, same_numbers, three_of_a_kind, two_pairs, pair):
         if three_of_a_kind:
             for number in same_numbers:
@@ -58,7 +71,9 @@ class Player:
                 if same_numbers[number] == 2:
                     return (1, number)
         return None
-
+    """
+    Metodi tarkistaa värin ja suoran.
+    """
     def check_straight_and_flush(self, suits, numbers):
         flush = False
         straight = True

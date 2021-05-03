@@ -1,10 +1,16 @@
 import pygame
+"""
+Metodi luo alkuvalikon, josta saa aloitettua pelin.
+"""
 def start_menu(self):
     menu_object = create_menu_button(self, "Aloita")
     pygame.draw.rect(self.screen, (0,0,0), menu_object[2])
     self.screen.blit(menu_object[1], menu_object[3])
     pygame.display.flip()
     return menu_object[2]
+"""
+Metodi luo loppuvalikon, josta saa aloitettua uuden pelin.
+"""
 def end_menu(self):
     menu_object = create_menu_button(self, "Uusi peli")
     newspace = 100
@@ -18,6 +24,9 @@ def end_menu(self):
     self.screen.blit(menu_object[1], menu_object[3])
     pygame.display.flip()
     return menu_object[2]
+"""
+Metodi luo napin keskelle näyttöä halutulla tekstillä.
+"""
 def create_menu_button(self, button_text):
     self.screen.fill(self.POKER_GREEN, (0,0, 800, 600))
     font = pygame.font.Font(None, 25)

@@ -9,9 +9,11 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.
 sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 from entities.player import Player
 from entities.deck import Deck
-from game_actions import play_poker, play_trick, compare_hands, round_ending, poker_points, set_up_players, set_up_scoreboard, menu_actions
+from game_logic.game_actions import play_poker, play_trick, compare_hands, round_ending, poker_points, set_up_players, set_up_scoreboard, menu_actions
 
-
+"""
+Luokka graafiselle käyttöliittymälle, kaikki toiminnallisuudet perustuvat tämän luokan muuttujiin.
+"""
 class GUI(object):
     def __init__(self):
         set_up_players(self)
@@ -43,7 +45,9 @@ class GUI(object):
         self.value_comparison = (0,0)
         self.winningtext = []
 
-    
+    """
+    Päämetodi koko sovelluksen graafisen käyttöliittymän pyörittämiselle.
+    """
     def main(self):
         clock = pygame.time.Clock()
         players_cards = []

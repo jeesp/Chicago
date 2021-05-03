@@ -3,6 +3,9 @@ import random
 import pygame
 from entities.deck import Deck
 from entities.player import Player
+"""
+Metodi palauttaa pokerikäden vertailun tuloksen.
+"""
 def end_game_poker_comparison(self):
     if self.value_comparison[0] != 0:
         self.scoreboard[self.value_comparison[0]] += self.value_comparison[1]
@@ -20,6 +23,9 @@ def end_game_poker_comparison(self):
               + ". Kukaan ei saanut pisteitä.")
     return ("Kenelläkään ei ollut mitään, joten kukaan ei saanut lopun "
             + "pokeripisteitä.")
+"""
+Metodi luo pelaajat peliin.
+"""
 def set_up_players(self):
     self.players = []
     player1 = Player('Ake')
@@ -30,10 +36,17 @@ def set_up_players(self):
     self.players.append(player3)
     player4 = Player('Åke')
     self.players.append(player4)
+"""
+Metodi luo tulostaulun.
+"""
 def set_up_scoreboard(self):
     self.scoreboard = dict()
     for player in self.players:
         self.scoreboard[player] = 0
+"""
+Metodi laskee ja vertaa pokerikäsien arvot sekä lisää voittajalle pisteet. 
+Metodi myös palauttaa tulostettavat tekstit pokerikierrokselta.
+"""
 def poker_points(self):
     hands = []
     lines_to_print = []
@@ -68,6 +81,9 @@ def poker_points(self):
         rivi = str(hand[0].name)+"n käsi: " + str(self.hand_values[hand[1][0]].lower())
         lines_to_print.append(rivi)
     return lines_to_print
+"""
+Metodi pokerikierroksen pelaamiseen ja graafisen käyttöliittymän päivittämiseen.
+"""
 def play_poker(self, event, players_cards, continue_button):
     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
         mouse_position = pygame.mouse.get_pos()
@@ -125,10 +141,16 @@ def play_poker(self, event, players_cards, continue_button):
                         hands.append((player, hand))
                     self.value_comparison = compare_hands(hands)
             self.mode= 1
+"""
+Metodi kortin vaihtoon.
+"""
 def change_card(self, player, cards_clicked):
     for card in cards_clicked:
         self.deck.add_card_to_dealt_cards(card)
         player.remove_card(card)
+"""
+Metodi tikkikierroksen pelaamiseen ja graafisen käyttöliittymän päivittämiseen.
+"""
 def play_trick(self, event, players_cards, continue_button):
     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
         mouse_position = pygame.mouse.get_pos()
@@ -212,6 +234,11 @@ def play_trick(self, event, players_cards, continue_button):
             if self.mode == 3:
                 self.mode = 1
             self.card_selected = False
+
+"""
+Metodi tikin pelaamiseen chicagon kanssa, tallessa siihen asti, 
+että chicago liitetään osaksi graafista käyttöliittymää.
+"""
 #def play_trick(dealing_turn, players, scoreboard, chicago):
 #    start = dealing_turn
 #    compare_card = (0, 0, 0)
@@ -254,6 +281,9 @@ def play_trick(self, event, players_cards, continue_button):
 #              compare_card, scoreboard)
 #
 #
+"""
+Metodi tikin ensimmäiseen kierrokseen, kun chicagoa ei ole vielä huudettu.
+"""
 def trick_no_chicago_first_round(players, start, no_chicago, chicago, played_cards):
     print(players[start].name + ", huudatko chicagon? y/n")
     answer = input()
@@ -283,6 +313,9 @@ def trick_no_chicago_first_round(players, start, no_chicago, chicago, played_car
         turn += 1
         if turn == len(players):
             turn = 0
+"""
+Metodi tikkikierroksen päättämiseen.
+"""
 def end_trick(self, chicago_on, chicago_successful, chicago_player, blanco_is_on):
     if chicago_on:
         if chicago_successful:
@@ -310,12 +343,19 @@ def end_trick(self, chicago_on, chicago_successful, chicago_player, blanco_is_on
         else:
             self.scoreboard[self.compare_card[2]] += 5
             print("Kierroksen lopetti " + self.compare_card[2].name)
+"""
+Metodi vertailukortin vaihtamiseen tikkiä varten.
+"""
 def set_compare_card(self, player, card):
     compare_card_number = card[0]
     compare_card_suit = card[1]
     compare_card_player = player
     self.compare_card = (compare_card_number, compare_card_suit, compare_card_player)
-#
+
+"""
+Metodi kortin vaihtamiseen chicagon kanssa, tallessa siihen asti, 
+että chicago liitetään osaksi graafista käyttöliittymää.
+"""
 #def change_card(hand, deck, chicago, deals):
 #    no_blancos = True
 #    for player in chicago:
@@ -345,7 +385,9 @@ def set_compare_card(self, player, card):
 #            deck.add_card_to_dealt_cards(card)
 #            hand[0].remove_card(card)
 #    print(cards_to_change)
-#
+"""
+Metodi kortin pelaamiseen tikissä.
+"""
 def play_card(self, player, played_card):
     i = 0
     playable_cards = []
@@ -365,6 +407,9 @@ def play_card(self, player, played_card):
     if played_card[1] == self.compare_card[1]:
         if played_card[0] > self.compare_card[0]:
             set_compare_card(self,player, played_card)
+"""
+Metodi pokerikäsien vertailuun.
+"""
 def compare_hands(hands):
     strongest_hand_object = (0, 0)
     strongest_hand = 0
@@ -395,6 +440,9 @@ def compare_hands(hands):
     if strongest_hand in comparable_hands and same_value_but_different_numbers:
         return (strongest_player, strongest_hand, 1)
     return (strongest_player, strongest_hand, 0)
+"""
+Metodi kierroksen päättämiseen ja pisteiden tarkistukseen.
+"""
 def round_ending(self, chicago):
     no_chicagos = True
     for player in chicago:
@@ -416,8 +464,11 @@ def round_ending(self, chicago):
     print("Uusi kierros.")
     print("")
     return False
+"""
+Metodi pistetarkistukseen ja pelin päättämiseen jos pisteitä on tarpeeksi.
+"""
 def points_check(self, points):
-    if points[len(points)-1] >= 5:
+    if points[len(points)-1] >= 10:
         if points[len(points)-1] > points[len(points)-2]:
             for player in self.players:
                 if self.scoreboard[player] == points[len(points)-1]:
@@ -433,6 +484,9 @@ def points_check(self, points):
             self.winningtext.append("Pisteillä: " + str(points[len(points)-1]))
         return True
     return False
+"""
+Metodi alku- ja loppuvalikon toimintoja varten.
+"""
 def menu_actions(self, event, button):
     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
         mouse_position = pygame.mouse.get_pos()

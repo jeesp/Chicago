@@ -1,6 +1,8 @@
 import random
 
-
+"""
+Luokka pakalle, konstruktori luo kaikki kortit listaan ja luo jaettujen korttien pakan.
+"""
 class Deck:
     def __init__(self):
         suits = ['hearts', 'diamonds', 'spades', 'clubs']
@@ -22,9 +24,15 @@ class Deck:
         self.cards = cards
         self.dealt_cards = []
 
+    """
+    Metodi korttien lisäämiseksi jaettuihin kortteihin.
+    """
     def add_card_to_dealt_cards(self, card):
         self.dealt_cards.append(card)
 
+    """
+    Metodi korttien jakamiseen pelaajille.
+    """
     def deal_cards(self, players):
         for player in players:
             while len(player.hand) < 5:

@@ -1,5 +1,8 @@
 import pygame
 import os
+"""
+Metodi piirtää kaikki kortit.
+"""
 def draw_window(self):
     self.screen.fill(self.POKER_GREEN, (0,0, 800, 600))
     stack_height = 7
@@ -24,6 +27,9 @@ def draw_window(self):
         left_player_height += space_between
         right_player_height += space_between
         top_player_width += space_between
+"""
+Metodi piirtää näytölle pelaajan kortit.
+"""
 def get_player_cards(self, player):
     font = pygame.font.Font(None, 25)
     text = font.render("Vuorossa " + self.players[self.turn].name, True, (255,255,255))
