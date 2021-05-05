@@ -11,13 +11,13 @@ Metodi luo pelaajat peliin.
 """
 def set_up_players(self):
     self.players = []
-    player1 = Player('Ake')
+    player1 = Player('Pelaaja 1')
     self.players.append(player1)
-    player2 = Player('Make')
+    player2 = Player('Pelaaja 2')
     self.players.append(player2)
-    player3 = Player('Jake')
+    player3 = Player('Pelaaja 3')
     self.players.append(player3)
-    player4 = Player('Åke')
+    player4 = Player('Pelaaja 4')
     self.players.append(player4)
 """
 Metodi luo tulostaulun.
@@ -80,11 +80,11 @@ def poker_points(self):
         self.poker_hand_lines.append("Kukaan ei saanut pisteitä.")
     else:
         if self.deals == 3:
-            self.poker_hand_lines.append("Kenelläkään ei ollut mitään, joten kukaan "
-                                         + "ei saanut lopun pokeripisteitä.")
+            self.poker_hand_lines.append("Kenelläkään ei ollut mitään.")
+            self.poker_hand_lines.append(" Kukaan ei saanut lopun pokeripisteitä.")
         else:
-            self.poker_hand_lines.append("Kenelläkään ei ollut mitään, joten kukaan "
-                                         + "ei saanut pokeripisteitä.")
+            self.poker_hand_lines.append("Kenelläkään ei ollut mitään.")
+            self.poker_hand_lines.append(" Kukaan ei saanut pokeripisteitä.")
 
 """
 Metodi pokerikierroksen pelaamiseen ja graafisen käyttöliittymän päivittämiseen.
@@ -206,6 +206,8 @@ def play_trick(self, event, players_cards, continue_button, chicago_object):
                 card[1].y-20, self.CARD_SIZE[0]+20, self.CARD_SIZE[1]+40))
             pygame.display.update()
             play_card(self, self.players[self.turn], played_card)
+            if self.compare_card[2] != self.chicago_player:
+                self.chicago_successful = False
             self.turn += 1
             if self.turn == len(self.players):
                 self.turn = 0
@@ -227,6 +229,7 @@ def play_trick(self, event, players_cards, continue_button, chicago_object):
                     if round_ending(self):
                         self.mode = 2
                         self.turn = 0
+                        self.deals = 0
                         self.card_selected = False
                         self.played_cards = []
                         self.start = 0
@@ -234,15 +237,15 @@ def play_trick(self, event, players_cards, continue_button, chicago_object):
                         self.dealing_turn = 0
                         self.starting_player = 0
                         self.game_to_play = 0
+                        print_round_ending_lines(self)
+                        time.sleep(5)
                     else:
                         print_round_ending_lines(self)
                         time.sleep(5)
-                    self.deals = 0
-                    poker_points(self)
+                        self.deals = 0
+                        poker_points(self)
                     set_up_chicago(self)
                 else:
-                    if self.compare_card[2] != self.chicago_player:
-                        self.chicago_successful = False
                     self.start = self.players.index(self.compare_card[2])
                     self.compare_card = None
                     self.turn = self.start
@@ -328,7 +331,7 @@ def compare_hands(hands):
     strongest_hand_object = (0, 0)
     strongest_hand = 0
     strongest_player = 0
-    comparable_hands = [1, 3, 4, 5, 8, 10]
+    comparable_hands = [1, 3, 4, 5, 8, 52]
     same_hand = False
     same_value_but_different_numbers = False
     for hand in hands:
@@ -347,7 +350,7 @@ def compare_hands(hands):
                     strongest_player = hand[0]
                 elif hand[1][1] == strongest_hand_object[1]:
                     same_hand = True
-            if hand[1][0] == 2:
+            if hand[1][0] == 2 or hand[1][0] == 6:
                 same_hand = True
     if same_hand:
         return (0, strongest_hand, 2)
@@ -359,7 +362,6 @@ Metodi kierroksen päättämiseen ja pisteiden tarkistukseen.
 """
 def round_ending(self):
     no_chicagos = True
-    self.round_ending_lines.append("Uusi kierros alkaa...")
     for player in self.chicago:
         if self.chicago[player] != 0:
             no_chicagos = False
@@ -413,6 +415,7 @@ def menu_actions(self, event, button):
                 set_up_players(self)
                 set_up_scoreboard(self)
                 set_up_chicago(self)
+                self.poker_hand_lines = []
             self.mode = 1
             self.game_to_play = 1
             random.shuffle(self.deck.cards)

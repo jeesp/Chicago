@@ -6,7 +6,7 @@ import pygame
 Metodi piirtää kaikki kortit.
 """
 def draw_window(self):
-    self.screen.fill(self.POKER_GREEN, (0,0, 800, 600))
+    self.screen.fill(self.POKER_GREEN, (0, 0, 800, 600))
     stack_height = 7
     deck_width = round(self.WIDTH/2 -self.CARD_SIZE[0]/2 -stack_height)
     deck_height = round(self.HEIGHT/2 -self.CARD_SIZE[1]/2 -stack_height)
@@ -33,7 +33,7 @@ Metodi piirtää näytölle pelaajan kortit.
 """
 def draw_other_player_cards(self, player, image, width, height, number):
     font = pygame.font.Font(None, 25)
-    player_text = font.render(self.players[player].name, True, (255,255,255))
+    player_text = font.render(self.players[player].name, True, (255, 255, 255))
     if number == 1:
         player_text_rect = player_text.get_rect(center=(width + self.CARD_SIZE[1]/2, height - 20))
     if number == 2:

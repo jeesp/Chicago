@@ -91,7 +91,7 @@ class TestApp(unittest.TestCase):
     def test_end_game_poker_with_nothing(self):
         self.deals = 3
         poker_points(self)
-        self.assertEqual(len(self.poker_hand_lines), 1)
+        self.assertEqual(len(self.poker_hand_lines), 2)
     def test_end_game_poker_with_clear_winner(self):
         self.value_comparison = (self.player3, 1, 0)
         self.deals = 3
@@ -124,7 +124,7 @@ class TestApp(unittest.TestCase):
         self.player3.hand = [(4, 'spades', '4_of_spades'), (13, 'spades', '13_of_spades'), (
             5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
         poker_points(self)
-        self.assertEqual(len(self.poker_hand_lines), 1)
+        self.assertEqual(len(self.poker_hand_lines), 2)
     def test_poker_points_win_same_hand(self):
         self.player.hand = [(4, 'spades', '4_of_spades'), (4, 'spades', '13_of_spades'), (
             5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
