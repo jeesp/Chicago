@@ -21,5 +21,8 @@
 | 29.4 | 4 | Aloitus- ja lopetusnäkymien luominen, uuden kierroksen mahdollisuus luotu|
 | 30.4 | 2 | Graafisen käyttöliittymän jakamista eri tiedostoihin, testien lisäämistä|
 | 3.5 | 2 | Testien lisäämistä, metodien siistimistä |
-| Yht. | 66 | |
+| 3.5 | 3 | Graafisen käyttöliittymän edistämistä |
+| 4.5 | 3 | Chicago-toiminnallisuuden lisääminen |
+| 5.5 | 4 | Chicago-toiminnallisuuden, pisteidenlaskun ja guin edistämistä |
+| Yht. | 76 | |
 
