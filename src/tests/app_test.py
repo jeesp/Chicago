@@ -1,25 +1,33 @@
 import unittest
 from entities.player import Player
 from entities.deck import Deck
-from game_logic.game_actions import end_game_poker_comparison, play_poker, play_trick, compare_hands, end_trick, set_compare_card
+from game_logic.game_actions import end_game_poker_points, play_poker, play_trick, compare_hands, end_trick, set_compare_card
 from game_logic.game_actions import play_card, round_ending, set_up_players, set_up_scoreboard, change_card, poker_points
 
 
-class TestPlayer(unittest.TestCase):
+class TestApp(unittest.TestCase):
     def setUp(self):
         self.player = Player("Jake")
         self.player2 = Player("Make")
         self.player3 = Player("Ake")
         self.scoreboard = {self.player: 0, self.player2: 0, self.player3: 0}
         self.hand_values = {0: "Ei mitään", 1: "Pari", 2: "Kaksi paria", 3: "Kolmoset", 4: "Suora",
-                   5: "Väri", 6: "Täyskäsi", 8: "Neloset", 10: "Värisuora"}
+                   5: "Väri", 6: "Täyskäsi", 8: "Neloset", 52: "Värisuora"}
         self.compare_card = None
         self.played_cards = []
-        self.value_comparison = (0,0,0)
+        self.value_comparison = (0, 0, 0)
         self.players = [self.player, self.player2, self.player3]
         self.winningtext = []
         self.deck = Deck()
-    def test_chacge_card(self):
+        self.round_ending_lines = []
+        self.poker_hand_lines = []
+        self.chicago = dict()
+        self.chicago_on = False
+        self.chicago_successful = False
+        self.chicago_player = False
+        self.blanco_is_on = False
+        self.deals = 0
+    def test_change_card(self):
         player = self.player3
         self.player3.hand = [(4, 'spades', '4_of_spades'), (13, 'spades', '13_of_spades'), (
             5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
@@ -47,7 +55,7 @@ class TestPlayer(unittest.TestCase):
         play_card(self, self.player3, played_card)
         self.assertEqual(self.compare_card, played_card)
         self.assertEqual(len(self.player3.hand), 0)
-    def test_play_first_card(self):
+    def test_play_winning_card(self):
         self.compare_card = (2, 'spades', self.player2)
         played_card = (5, 'spades', self.player3)
         self.player3.hand.append(played_card)
@@ -73,8 +81,8 @@ class TestPlayer(unittest.TestCase):
         chicago = dict()
         for player in self.players:
             chicago[player] = 0
-        self.scoreboard[self.player3] = 11
-        self.assertEqual(round_ending(self, chicago), True)
+        self.scoreboard[self.player3] = 100
+        self.assertEqual(round_ending(self), True)
         self.assertEqual(len(self.winningtext), 2)
         self.assertEqual(self.winningtext[0], "Peli päättynyt!")
         self.assertEqual(self.winningtext[1], "Voittaja on: " + self.player3.name 
@@ -82,22 +90,20 @@ class TestPlayer(unittest.TestCase):
     def test_points_check(self):
         x = 0
     def test_end_game_poker_with_nothing(self):
-        self.assertEqual(end_game_poker_comparison(self), "Kenelläkään ei ollut mitään, joten kukaan ei saanut lopun pokeripisteitä.")
+        end_game_poker_points(self)
+        self.assertEqual(len(self.round_ending_lines), 1)
     def test_end_game_poker_with_clear_winner(self):
-        self.value_comparison = (self.player3,1,0)
-        self.assertEqual(end_game_poker_comparison(self), "Lopun pokeripisteet sai: " + self.value_comparison[0].name + ". Käsi: "
-                                                    + self.hand_values[self.value_comparison[1]].lower() + ".")
+        self.value_comparison = (self.player3, 1, 0)
+        end_game_poker_points(self)
+        self.assertEqual(len(self.round_ending_lines), 2)
     def test_end_game_poker_win_with_same_hand(self):
-        self.value_comparison = (self.player3,1,1)
-        self.assertEqual(end_game_poker_comparison(self), "Lopun pokeripisteet sai: " + self.value_comparison[0].name + ". Käsi: " 
-                         + self.hand_values[self.value_comparison[1]].lower()
-                         + ". Myös toisella pelaajalla oli " 
-                         + self.hand_values[self.value_comparison[1]].lower() + ".")
-    def test_end_game_poker_same_hand(self):
-        self.value_comparison = (self.player3,1,2)
-        self.assertEqual(end_game_poker_comparison(self), "Kahdella pelaajalla oli sama käsi: " 
-                         + self.hand_values[self.value_comparison[1]].lower() 
-                         + ". Kukaan ei saanut pisteitä.") 
+        self.value_comparison = (self.player3, 1, 1)
+        end_game_poker_points(self)
+        self.assertEqual(len(self.round_ending_lines), 3)
+    def test_end_game_poker_draw_same_hand(self):
+        self.value_comparison = (self.player3, 1, 2)
+        end_game_poker_points(self)
+        self.assertEqual(len(self.round_ending_lines), 2)
     def test_poker_points_with_clear_winner(self):
         self.player.hand = [(4, 'spades', '4_of_spades'), (4, 'spades', '13_of_spades'), (
             5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
@@ -105,7 +111,8 @@ class TestPlayer(unittest.TestCase):
             5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
         self.player3.hand = [(4, 'spades', '4_of_spades'), (13, 'spades', '13_of_spades'), (
             5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
-        self.assertEqual(len(poker_points(self)), 7)
+        poker_points(self)
+        self.assertEqual(len(self.poker_hand_lines), 2)
     def test_poker_points_no_points(self):
         self.player.hand = [(4, 'spades', '4_of_spades'), (13, 'spades', '13_of_spades'), (
             5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
@@ -113,7 +120,8 @@ class TestPlayer(unittest.TestCase):
             5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
         self.player3.hand = [(4, 'spades', '4_of_spades'), (13, 'spades', '13_of_spades'), (
             5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
-        self.assertEqual(len(poker_points(self)), 7)
+        poker_points(self)
+        self.assertEqual(len(self.poker_hand_lines), 1)
     def test_poker_points_win_same_hand(self):
         self.player.hand = [(4, 'spades', '4_of_spades'), (4, 'spades', '13_of_spades'), (
             5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
@@ -121,7 +129,8 @@ class TestPlayer(unittest.TestCase):
             5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (6, 'hearts', '3_of_hearts')]
         self.player3.hand = [(4, 'spades', '4_of_spades'), (13, 'spades', '13_of_spades'), (
             5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
-        self.assertEqual(len(poker_points(self)), 7)
+        poker_points(self)
+        self.assertEqual(len(self.poker_hand_lines), 3)
     def test_poker_points_same_hand(self):
         self.player.hand = [(4, 'spades', '4_of_spades'), (4, 'spades', '13_of_spades'), (
             5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
@@ -129,59 +138,41 @@ class TestPlayer(unittest.TestCase):
             5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
         self.player3.hand = [(4, 'spades', '4_of_spades'), (13, 'spades', '13_of_spades'), (
             5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
-        self.assertEqual(len(poker_points(self)), 7)
+        poker_points(self)
+        self.assertEqual(len(self.poker_hand_lines), 2)
     def test_end_trick_succesful_blanco(self):
-        chicago_on = True
-        chicago_successful = True
-        chicago_player = self.player3
-        blanco_is_on = True
+        self.chicago_on = True
+        self.chicago_successful = True
+        self.chicago_player = self.player3
+        self.blanco_is_on = True
         self.compare_card = (5, 'spades', self.player3)
-        end_trick(self, chicago_on, chicago_successful, chicago_player,
-                  blanco_is_on)
+        end_trick(self)
         self.assertEqual(
             (self.scoreboard[self.player3], self.scoreboard[self.player2]), (30, 0))
 
     def test_end_trick_unsuccesful_chicago(self):
-        chicago_on = True
-        chicago_successful = False
-        chicago_player = self.player3
-        blanco_is_on = False
+        self.chicago_on = True
+        self.chicago_player = self.player3
         self.compare_card = (5, 'spades', self.player2)
-        end_trick(self, chicago_on, chicago_successful, chicago_player,
-                  blanco_is_on)
-        self.assertEqual(
-            (self.scoreboard[self.player3], self.scoreboard[self.player2]), (-15, 5))
+        end_trick(self)
+        self.assertEqual((self.scoreboard[self.player3], self.scoreboard[self.player2]), (-15, 5))
 
     def test_end_trick_unsuccesful_blanco(self):
-        chicago_on = True
-        chicago_successful = False
-        chicago_player = self.player3
-        blanco_is_on = True
+        self.chicago_on = True
+        self.chicago_player = self.player3
+        self.blanco_is_on = True
         self.compare_card = (5, 'spades', self.player2)
-        end_trick(self, chicago_on, chicago_successful, chicago_player,
-                  blanco_is_on)
-        self.assertEqual(
-            (self.scoreboard[self.player3], self.scoreboard[self.player2]), (-30, 5))
+        end_trick(self)
+        self.assertEqual((self.scoreboard[self.player3], self.scoreboard[self.player2]), (-30, 5))
 
     def test_end_trick_no_chicago(self):
-        chicago_on = False
-        chicago_successful = False
-        chicago_player = None
-        blanco_is_on = False
         self.compare_card = (5, 'spades', self.player2)
-        end_trick(self, chicago_on, chicago_successful, chicago_player,
-                  blanco_is_on)
-        self.assertEqual(
-            (self.scoreboard[self.player3], self.scoreboard[self.player2]), (0, 5))
+        end_trick(self)
+        self.assertEqual((self.scoreboard[self.player3], self.scoreboard[self.player2]), (0, 5))
 
     def test_end_trick_with_2_no_chicago(self):
-        chicago_on = False
-        chicago_successful = False
-        chicago_player = None
-        blanco_is_on = False
         self.compare_card = (2, 'spades', self.player2)
-        end_trick(self, chicago_on, chicago_successful, chicago_player,
-                  blanco_is_on)
+        end_trick(self)
         self.assertEqual(
             (self.scoreboard[self.player3], self.scoreboard[self.player2]), (0, 10))
 
@@ -195,7 +186,7 @@ class TestPlayer(unittest.TestCase):
         hv1 = self.player.hand_value()
         hv2 = self.player2.hand_value()
         hv3 = self.player3.hand_value()
-        self.assertEqual(TestPlayer.compare(self, hv1, hv2, hv3), (0, 0, 0))
+        self.assertEqual(TestApp.compare(self, hv1, hv2, hv3), (0, 0, 0))
 
     def test_comparing_pair(self):
         self.player.hand = [(4, 'spades', '4_of_spades'), (4, 'spades', '13_of_spades'), (
@@ -207,7 +198,7 @@ class TestPlayer(unittest.TestCase):
         hv1 = self.player.hand_value()
         hv2 = self.player2.hand_value()
         hv3 = self.player3.hand_value()
-        self.assertEqual(TestPlayer.compare(
+        self.assertEqual(TestApp.compare(
             self, hv1, hv2, hv3), (self.player, 1, 0))
 
     def test_comparing_twopair(self):
@@ -220,7 +211,7 @@ class TestPlayer(unittest.TestCase):
         hv1 = self.player.hand_value()
         hv2 = self.player2.hand_value()
         hv3 = self.player3.hand_value()
-        self.assertEqual(TestPlayer.compare(self, hv1, hv2, hv3), (0, 1, 2))
+        self.assertEqual(TestApp.compare(self, hv1, hv2, hv3), (0, 1, 2))
 
     def test_comparing_better_pair(self):
         self.player.hand = [(4, 'spades', '4_of_spades'), (4, 'spades', '13_of_spades'), (
@@ -232,7 +223,7 @@ class TestPlayer(unittest.TestCase):
         hv1 = self.player.hand_value()
         hv2 = self.player2.hand_value()
         hv3 = self.player3.hand_value()
-        self.assertEqual(TestPlayer.compare(
+        self.assertEqual(TestApp.compare(
             self, hv1, hv2, hv3), (self.player2, 1, 1))
 
     def test_comparing_three_of_a_kind(self):
@@ -245,7 +236,7 @@ class TestPlayer(unittest.TestCase):
         hv1 = self.player.hand_value()
         hv2 = self.player2.hand_value()
         hv3 = self.player3.hand_value()
-        self.assertEqual(TestPlayer.compare(
+        self.assertEqual(TestApp.compare(
             self, hv1, hv2, hv3), (self.player, 3, 0))
     def test_comparing_straight_flush(self):
         self.player.hand = [(4, 'spades', '4_of_spades'), (5, 'spades', '5_of_spades'), (6, 'spades', '6_of_spades'),
@@ -257,8 +248,8 @@ class TestPlayer(unittest.TestCase):
         hv1 = self.player.hand_value()
         hv2 = self.player2.hand_value()
         hv3 = self.player3.hand_value()
-        self.assertEqual(TestPlayer.compare(
-            self, hv1, hv2, hv3), (self.player, 10, 0))
+        self.assertEqual(TestApp.compare(
+            self, hv1, hv2, hv3), (self.player, 52, 0))
     def test_comparing_straight(self):
         self.player.hand = [(4, 'spades', '4_of_spades'), (5, 'spades', '5_of_spades'), (6, 'spades', '6_of_spades'),
         (7, 'spades', '7_of_spades'),(8, 'clubs', '8_of_clubs'),]
@@ -269,7 +260,7 @@ class TestPlayer(unittest.TestCase):
         hv1 = self.player.hand_value()
         hv2 = self.player2.hand_value()
         hv3 = self.player3.hand_value()
-        self.assertEqual(TestPlayer.compare(
+        self.assertEqual(TestApp.compare(
             self, hv1, hv2, hv3), (self.player, 4, 0))
 
     def test_comparing_flush(self):
@@ -282,7 +273,7 @@ class TestPlayer(unittest.TestCase):
         hv1 = self.player.hand_value()
         hv2 = self.player2.hand_value()
         hv3 = self.player3.hand_value()
-        self.assertEqual(TestPlayer.compare(
+        self.assertEqual(TestApp.compare(
             self, hv1, hv2, hv3), (self.player, 5, 0))
     def compare(self, hand_value1, hand_value2, hand_value3):
         hands = []

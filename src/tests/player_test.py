@@ -41,7 +41,7 @@ class TestPlayer(unittest.TestCase):
 
         self.player.hand = [(9, 'spades', '4_of_spades'), (10, 'spades', 'king_of_spades'), (
             12, 'spades', '5_of_clubs'), (8, 'spades', '8_of_spades'), (11, 'spades', '3_of_hearts')]
-        self.assertEqual(self.player.hand_value(), (10, 12))
+        self.assertEqual(self.player.hand_value(), (52, 12))
     def test_new_player(self):
         self.player2 = Player("Aapo")
         self.assertEqual(self.player2.name, "Aapo")

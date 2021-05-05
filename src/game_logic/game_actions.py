@@ -3,26 +3,44 @@ import random
 import pygame
 from entities.deck import Deck
 from entities.player import Player
+from ui.gameplay_ui import draw_blanco_button, draw_continue_button, draw_chicago_button
+from ui.gameplay_ui import trick_card_select, poker_card_select, print_round_ending_lines
 """
 Metodi palauttaa pokerikäden vertailun tuloksen.
 """
-def end_game_poker_comparison(self):
+def end_game_poker_points(self):
     if self.value_comparison[0] != 0:
         self.scoreboard[self.value_comparison[0]] += self.value_comparison[1]
         if self.value_comparison[2] == 0:
-            return ("Lopun pokeripisteet sai: " + self.value_comparison[0].name + ". Käsi: "
-                  + self.hand_values[self.value_comparison[1]].lower() + ".")
+            self.round_ending_lines.append("Lopun pokeripisteet sai: " 
+                                           + self.value_comparison[0].name)
+            self.round_ending_lines.append("Käsi: "
+                                           + self.hand_values[self.value_comparison[1]].lower() + ".")
         if self.value_comparison[2] == 1:
-            return ("Lopun pokeripisteet sai: " + self.value_comparison[0].name + ". Käsi: "
-                  + self.hand_values[self.value_comparison[1]].lower() +
-                  ". Myös toisella pelaajalla oli "
-                  + self.hand_values[self.value_comparison[1]].lower() + ".")
+            self.round_ending_lines.append("Lopun pokeripisteet sai: " 
+                                           + self.value_comparison[0].name)
+            self.round_ending_lines.append("Käsi: " + self.hand_values[self.value_comparison[1]].lower())
+            self.round_ending_lines.append("Myös toisella pelaajalla oli "
+                                           + self.hand_values[self.value_comparison[1]].lower() + ".")
+        if self.value_comparison[1] == 8:
+            if not self.points_reseted:
+                self.points_reseted = True
+                for player in self.scoreboard:
+                    if player != self.value_comparison[0]:
+                        self.scoreboard[player] == 0
+                self.round_ending_lines.append("Pelaajien pisteet nollattiin nelosten takia.")
+        if self.value_comparison[1] == 52:
+            for player in self.scoreboard:
+                if player != self.value_comparison[0]:
+                    self.scoreboard[player] == 0
+            self.round_ending_lines.append("Pelaajien pisteet värisuoran takia.")
     if self.value_comparison[2] == 2:
-        return ("Kahdella pelaajalla oli sama käsi: "
-              + self.hand_values[self.value_comparison[1]].lower()
-              + ". Kukaan ei saanut pisteitä.")
-    return ("Kenelläkään ei ollut mitään, joten kukaan ei saanut lopun "
-            + "pokeripisteitä.")
+        self.round_ending_lines.append("Kahdella pelaajalla oli sama käsi: "
+                                       + self.hand_values[self.value_comparison[1]].lower())
+        self.round_ending_lines.append(". Kukaan ei saanut pisteitä.")
+    if self.value_comparison[0] == 0:
+        self.round_ending_lines.append("Kenelläkään ei ollut mitään, joten kukaan ei saanut lopun "
+                                       + "pokeripisteitä.")
 """
 Metodi luo pelaajat peliin.
 """
@@ -47,69 +65,84 @@ def set_up_scoreboard(self):
 Metodi laskee ja vertaa pokerikäsien arvot sekä lisää voittajalle pisteet. 
 Metodi myös palauttaa tulostettavat tekstit pokerikierrokselta.
 """
+def set_up_chicago(self):
+    self.chicago = dict()
+    for player in self.players:
+        self.chicago[player] = 0
+    self.chicago_on = False
+    self.chicago_successful = False
+    self.chicago_player = None
+    self.blanco_is_on = False
 def poker_points(self):
     hands = []
-    lines_to_print = []
+    self.poker_hand_lines = []
     for player in self.players:
         hand = player.hand_value()
         hands.append((player, hand))
     self.value_comparison = compare_hands(hands)
     if self.value_comparison[0] != 0:
         self.scoreboard[self.value_comparison[0]] += self.value_comparison[1]
-        
         if self.value_comparison[2] == 0:
-            rivi = str("Pisteet sai: " + self.value_comparison[0].name + ". Käsi: " 
-            + self.hand_values[self.value_comparison[1]].lower() + ".")
-            lines_to_print.append(rivi)
+            line = "Pisteet " + str(self.deals + 1) + ". kierrokselta sai: " + self.value_comparison[0].name
+            self.poker_hand_lines.append(line)
+            line = "Käsi: " + self.hand_values[self.value_comparison[1]].lower() + "."
+            self.poker_hand_lines.append(line)
         if self.value_comparison[2] == 1:
-            rivi = str("Pisteet sai: " + self.value_comparison[0].name + ". Käsi: "
-            + self.hand_values[self.value_comparison[1]].lower()
-            + ". Myös toisella pelaajalla oli "
-            + self.hand_values[self.value_comparison[1]].lower() + ".")
-            lines_to_print.append(rivi)
+            line = "Pisteet " + str(self.deals + 1) + ". kierrokselta sai: " + self.value_comparison[0].name
+            self.poker_hand_lines.append(line)
+            line = ("Käsi: " + self.hand_values[self.value_comparison[1]].lower())
+            self.poker_hand_lines.append(line)
+            line = ("Myös toisella pelaajalla oli "
+                    + self.hand_values[self.value_comparison[1]].lower() + ".")
+            self.poker_hand_lines.append(line)
+        if self.value_comparison[1] == 8:
+            if not self.points_reseted:
+                self.points_reseted = True
+                for player in self.scoreboard:
+                    if player != self.value_comparison[0]:
+                        self.scoreboard[player] == 0
+                line = ("Pelaajien pisteet nollattiin nelosten takia.")
+                self.poker_hand_lines.append(line)
+        if self.value_comparison[1] == 52:
+            for player in self.scoreboard:
+                if player != self.value_comparison[0]:
+                    self.scoreboard[player] == 0
+            line = ("Pelaajien pisteet värisuoran takia.")
     elif self.value_comparison[2] == 2:
-        rivi = str("Kahdella pelaajalla on sama käsi: "
-        + self.hand_values[self.value_comparison[1]].lower()
-        + ". Kukaan ei saanut pisteitä.")
-        lines_to_print.append(rivi)
+        line = ("Kahdella pelaajalla on sama käsi: "
+                + self.hand_values[self.value_comparison[1]].lower() + ".")
+        self.poker_hand_lines.append(line)
+        line = "Kukaan ei saanut pisteitä."
+        self.poker_hand_lines.append(line)
     else:
-        lines_to_print.append("Kenelläkään ei ollut mitään, joten kukaan ei saanut pisteitä.")
-    for player in self.scoreboard:
-        rivi = str(player.name) + ": " + str(self.scoreboard[player])
-        lines_to_print.append(rivi)
-    for hand in hands:
-        rivi = str(hand[0].name)+"n käsi: " + str(self.hand_values[hand[1][0]].lower())
-        lines_to_print.append(rivi)
-    return lines_to_print
+        self.poker_hand_lines.append("Kenelläkään ei ollut mitään, joten kukaan ei saanut pisteitä.")
+
 """
 Metodi pokerikierroksen pelaamiseen ja graafisen käyttöliittymän päivittämiseen.
 """
-def play_poker(self, event, players_cards, continue_button):
+def play_poker(self, event, players_cards, continue_button, blanco_object):
     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
         mouse_position = pygame.mouse.get_pos()
-        for card in players_cards:
-            if card[1].collidepoint(mouse_position):
-                pygame.draw.rect(self.screen, self.POKER_GREEN, pygame.Rect(card[1].x,
-                card[1].y, self.CARD_SIZE[0], self.CARD_SIZE[1]))
-                pygame.display.flip()
-                x_change = 5
-                y_change = 15
-                if card[3] == False:
-                    pygame.draw.rect(self.screen, (25,25,25), pygame.Rect(card[1].x,
-                    card[1].y, self.CARD_SIZE[0], self.CARD_SIZE[1]))
-                    card[1].x += x_change
-                    card[1].y -= y_change
-                    card[3] = True
+        poker_card_select(self,players_cards)
+        if blanco_object[0] != 0:
+            if blanco_object[0].collidepoint(mouse_position):
+                if not blanco_object[1]:
+                    color = (0, 200, 0)
+                    draw_blanco_button(self, color)
+                    blanco_object[1] = True
+                    print(blanco_object)
                 else:
-                    card[1].x -= x_change
-                    card[1].y += y_change
-                    card[3] = False
-                self.screen.blit(card[2], card[1])
-                pygame.display.update()
-                self.mode = 3
+                    color = (0, 0, 0)
+                    draw_blanco_button(self, color)
+                    blanco_object[1] = False
+                    print(blanco_object)
+            pygame.display.update()
+            self.mode = 3
         if continue_button.collidepoint(mouse_position):
+            if blanco_object[1]:
+                self.chicago[self.players[self.turn]] = 2
             cards_clicked = []
-            
+            print(self.chicago)
             pygame.display.flip()
             for card in players_cards:
                 if card[3]:
@@ -122,9 +155,6 @@ def play_poker(self, event, players_cards, continue_button):
             if self.turn == len(self.players):
                 self.turn = 0
             if self.turn == self.dealing_turn:
-                chicago = dict()
-                for player in self.players:
-                    chicago[player] = 0
                 random.shuffle(self.deck.cards)
                 self.deck.deal_cards(self.players)
                 self.deals += 1
@@ -132,6 +162,14 @@ def play_poker(self, event, players_cards, continue_button):
                     print(poker_points(self))
                 if self.deals == 2:
                     self.game_to_play = 2
+                    for player in self.chicago:
+                        if self.chicago[player] != 0:
+                            self.start = self.players.index(player)
+                            self.game_to_play = 2
+                            self.chicago_player = self.players[self.turn]
+                            self.chicago_successful = True
+                            self.chicago_on = True
+                            self.blanco_is_on = True
                     self.turn = self.start
                     self.deals = 3
                     print(self.players[self.turn].name)
@@ -140,7 +178,16 @@ def play_poker(self, event, players_cards, continue_button):
                         hand = player.hand_value()
                         hands.append((player, hand))
                     self.value_comparison = compare_hands(hands)
-            self.mode= 1
+            self.mode = 1
+    draw_continue_button(self)
+    if blanco_object[0] != 0:
+        if blanco_object[1]:
+            color = (0, 200, 0)
+            draw_blanco_button(self, color)
+        else:
+            color = (0, 0, 0)
+            draw_blanco_button(self, color)
+    pygame.display.update()
 """
 Metodi kortin vaihtoon.
 """
@@ -151,33 +198,36 @@ def change_card(self, player, cards_clicked):
 """
 Metodi tikkikierroksen pelaamiseen ja graafisen käyttöliittymän päivittämiseen.
 """
-def play_trick(self, event, players_cards, continue_button):
+def play_trick(self, event, players_cards, continue_button, chicago_object):
     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
         mouse_position = pygame.mouse.get_pos()
-        for card in players_cards:
-            if card[1].collidepoint(mouse_position):
-                pygame.draw.rect(self.screen, self.POKER_GREEN, pygame.Rect(card[1].x,
-                card[1].y, self.CARD_SIZE[0], self.CARD_SIZE[1]))
-                pygame.display.flip()
-                x_change = 5
-                y_change = 15
-                if card[3] == False and self.card_selected == False:
-                    pygame.draw.rect(self.screen, (25,25,25), pygame.Rect(card[1].x,
-                    card[1].y, self.CARD_SIZE[0], self.CARD_SIZE[1]))
-                    card[1].x += x_change
-                    card[1].y -= y_change
-                    card[3] = True
-                    self.card_selected = True
-                elif card[3] == True and self.card_selected == True:
-                    card[1].x -= x_change
-                    card[1].y += y_change
-                    card[3] = False
-                    self.card_selected = False
-                self.screen.blit(card[2], card[1])
-                pygame.display.update()
-                self.mode = 3
-                print(card)
+        trick_card_select(self, players_cards)
+        if chicago_object[0] != 0:
+            if chicago_object[0].collidepoint(mouse_position):
+                if not chicago_object[1]:
+                    color = (0, 200, 0)
+                    draw_blanco_button(self, color)
+                    chicago_object[1] = True
+                    print(chicago_object)
+                else:
+                    color = (0, 0, 0)
+                    draw_blanco_button(self, color)
+                    chicago_object[1] = False
+                    print(chicago_object)
+            pygame.display.update()
+            self.mode = 3
+        if continue_button.collidepoint(mouse_position) and chicago_object[1]:
+            self.chicago[self.players[self.turn]] = 1
+            self.mode = 1
+            self.start = self.players.index(self.players[self.turn])
+            self.chicago_player = self.players[self.turn]
+            self.chicago_successful = True
+            self.chicago_on = True
+            self.compare_card = None
+            for card in self.played_cards:
+                card[0].hand.append(card[1])
         if continue_button.collidepoint(mouse_position) and self.card_selected:
+            print(self.chicago_successful)
             played_card = (0,0,0)
             for card in players_cards:
                 if card[3]:
@@ -203,17 +253,12 @@ def play_trick(self, event, players_cards, continue_button):
                     self.deck = Deck()
                     self.start = self.dealing_turn
                     self.turn = self.dealing_turn
+                    self.played_cards = []
+                    self.round_ending_lines = []
                     random.shuffle(self.deck.cards)
                     self.deck.deal_cards(self.players)
-                    chicago_on = False
-                    chicago_successful = False
-                    chicago_player = None
-                    blanco_is_on = False
-                    end_trick(self, chicago_on, chicago_successful, chicago_player, blanco_is_on)
-                    chicago = dict()
-                    for player in self.players:
-                        chicago[player] = 0
-                    if round_ending(self, chicago):
+                    end_trick(self)
+                    if round_ending(self):
                         self.mode = 2
                         self.turn = 0
                         self.card_selected = False
@@ -223,9 +268,14 @@ def play_trick(self, event, players_cards, continue_button):
                         self.value_comparison = (0,0)
                         self.dealing_turn = 0
                         self.starting_player = 0
+                        self.game_to_play = 0
                     else:
-                        print(poker_points(self))
+                        print_round_ending_lines(self)
+                        time.sleep(5)
+                    set_up_chicago(self)
                 else:
+                    if self.compare_card[2] != self.chicago_player:
+                        self.chicago_successful = False
                     self.start = self.players.index(self.compare_card[2])
                     self.compare_card = None
                     self.turn = self.start
@@ -234,115 +284,48 @@ def play_trick(self, event, players_cards, continue_button):
             if self.mode == 3:
                 self.mode = 1
             self.card_selected = False
+    draw_continue_button(self)
+    if chicago_object[0] != 0:
+        if chicago_object[1]:
+            color = (0, 200, 0)
+            draw_chicago_button(self, color)
+        else:
+            color = (0, 0, 0)
+            draw_chicago_button(self, color)
+    pygame.display.update()
 
-"""
-Metodi tikin pelaamiseen chicagon kanssa, tallessa siihen asti, 
-että chicago liitetään osaksi graafista käyttöliittymää.
-"""
-#def play_trick(dealing_turn, players, scoreboard, chicago):
-#    start = dealing_turn
-#    compare_card = (0, 0, 0)
-#    no_chicago = True
-#    played_cards = []
-#    for player in chicago:
-#        if chicago[player] != 0:
-#            start = players.index(player)
-#            no_chicago = False
-#    if no_chicago:
-#        start = trick_no_chicago_first_round(
-#            players, start, no_chicago, chicago, played_cards)
-#    chicago_on = False
-#    chicago_successful = True
-#    chicago_player = None
-#    blanco_is_on = False
-#    for player in chicago:
-#        if chicago[player] != 0:
-#            chicago_on = True
-#            chicago_player = player
-#            if chicago[player] == 2:
-#                blanco_is_on = True
-#    while len(players[0].hand) > 0:
-#        compare_card = None
-#        compare_card = play_card(players[start], compare_card, played_cards)
-#        print(compare_card)
-#        turn = start + 1
-#        if turn == len(players):
-#            turn = 0
-#        while turn != start:
-#            compare_card = play_card(players[turn], compare_card, played_cards)
-#            turn += 1
-#            if turn == len(players):
-#                turn = 0
-#        start = players.index(compare_card[2])
-#        if chicago_on:
-#            if compare_card[2] != chicago_player:
-#                chicago_successful = False
-#    end_trick(chicago_on, chicago_successful, chicago_player, blanco_is_on,
-#              compare_card, scoreboard)
-#
-#
-"""
-Metodi tikin ensimmäiseen kierrokseen, kun chicagoa ei ole vielä huudettu.
-"""
-def trick_no_chicago_first_round(players, start, no_chicago, chicago, played_cards):
-    print(players[start].name + ", huudatko chicagon? y/n")
-    answer = input()
-    if answer == "y":
-        print(players[start].name + " huusi chicagon")
-        no_chicago = False
-        chicago[players[start]] = 1
-    compare_card = None
-    compare_card = play_card(players[start], compare_card, played_cards)
-    print(compare_card)
-    turn = start + 1
-    if turn == len(players):
-        turn = 0
-    while turn != start:
-        if no_chicago:
-            print(players[turn].name + ", huudatko chicagon? y/n")
-            answer = input()
-            if answer == "y":
-                print(players[turn].name + " huusi chicagon")
-                no_chicago = False
-                chicago[players[turn]] = 1
-                for card in played_cards:
-                    card[0].hand.append(card[1])
-                start = players.index(players[turn])
-                return start
-        compare_card = play_card(players[turn], compare_card, played_cards)
-        turn += 1
-        if turn == len(players):
-            turn = 0
 """
 Metodi tikkikierroksen päättämiseen.
 """
-def end_trick(self, chicago_on, chicago_successful, chicago_player, blanco_is_on):
-    if chicago_on:
-        if chicago_successful:
-            if blanco_is_on:
+def end_trick(self):
+    if self.chicago_on:
+        if self.chicago_successful:
+            if self.blanco_is_on:
                 self.scoreboard[self.compare_card[2]] += 30
-                print(self.compare_card[2].name +
-                      " sai läpi onnistuneesti blanco-chicagon.")
+                self.round_ending_lines.append(self.compare_card[2].name
+                                               + " sai läpi onnistuneesti blanco-chicagon.")
             else:
                 self.scoreboard[self.compare_card[2]] += 15
-                print(self.compare_card[2].name +
-                      " sai läpi onnistuneesti chicagon.")
+                self.round_ending_lines.append(self.compare_card[2].name
+                                               + " sai läpi onnistuneesti chicagon.")
         else:
             self.scoreboard[self.compare_card[2]] += 5
-            print(self.compare_card[2].name + " sai lopetuksen ja " + chicago_player.name
-                  + "n chicago meni pieleen.")
-            if blanco_is_on:
-                self.scoreboard[chicago_player] -= 30
+            self.round_ending_lines.append(self.compare_card[2].name 
+                                           + " sai lopetuksen ja " + self.chicago_player.name
+                                           + "n chicago meni pieleen.")
+            if self.blanco_is_on:
+                self.scoreboard[self.chicago_player] -= 30
             else:
-                self.scoreboard[chicago_player] -= 15
+                self.scoreboard[self.chicago_player] -= 15
     else:
         if self.compare_card[0] == 2:
             self.scoreboard[self.compare_card[2]] += 10
-            print("Kierroksen lopetti " +
+            self.round_ending_lines.append("Kierroksen lopetti " +
                   self.compare_card[2].name + " kakkoslopetuksella")
         else:
             self.scoreboard[self.compare_card[2]] += 5
-            print("Kierroksen lopetti " + self.compare_card[2].name)
+            self.round_ending_lines.append("Kierroksen lopetti " 
+                                           + self.compare_card[2].name)
 """
 Metodi vertailukortin vaihtamiseen tikkiä varten.
 """
@@ -351,40 +334,6 @@ def set_compare_card(self, player, card):
     compare_card_suit = card[1]
     compare_card_player = player
     self.compare_card = (compare_card_number, compare_card_suit, compare_card_player)
-
-"""
-Metodi kortin vaihtamiseen chicagon kanssa, tallessa siihen asti, 
-että chicago liitetään osaksi graafista käyttöliittymää.
-"""
-#def change_card(hand, deck, chicago, deals):
-#    no_blancos = True
-#    for player in chicago:
-#        if chicago[player] != 0:
-#            no_blancos = False
-#    if deals == 1 and no_blancos:
-#        print("Huudatko blanco-chicagon?")
-#        print(hand[0].name + "? y/n")
-#        answer = input()
-#        if answer == "y":
-#            chicago[hand[0]] = 2
-#            print(hand[0].name + " huusi blanco-chicagon")
-#    print(hand[0].name + ", mitä vaihdetaan? Anna indeksi")
-#    i = 0
-#    while i < len(hand[0].hand):
-#        print(str(i) + ": " + hand[0].hand[i][2])
-#        i += 1
-#    changecards_ids = input("Syötä indeksit pilkulla erotettuna: ")
-#    print(changecards_ids)
-#    changedcards_ids_as_list = changecards_ids.split(",")
-#    print(changedcards_ids_as_list)
-#    cards_to_change = []
-#    if changecards_ids != "":
-#        for changecard_id in changedcards_ids_as_list:
-#            cards_to_change.append(hand[0].hand[int(changecard_id)])
-#        for card in cards_to_change:
-#            deck.add_card_to_dealt_cards(card)
-#            hand[0].remove_card(card)
-#    print(cards_to_change)
 """
 Metodi kortin pelaamiseen tikissä.
 """
@@ -443,17 +392,16 @@ def compare_hands(hands):
 """
 Metodi kierroksen päättämiseen ja pisteiden tarkistukseen.
 """
-def round_ending(self, chicago):
+def round_ending(self):
     no_chicagos = True
-    for player in chicago:
-        if chicago[player] != 0:
+    self.round_ending_lines.append("Uusi kierros alkaa...")
+    for player in self.chicago:
+        if self.chicago[player] != 0:
             no_chicagos = False
     if no_chicagos:
-        print (end_game_poker_comparison(self))
+        end_game_poker_points(self)
     else:
-        print("Kierroksella huudettiin chicago, ei pokeripisteitä.")
-    for player in self.scoreboard:
-        print(player.name + ": ", self.scoreboard[player])
+        self.round_ending_lines.append("Kierroksella huudettiin chicago, ei pokeripisteitä.")
     points = []
     for player in self.players:
         points.append(self.scoreboard[player])
@@ -468,7 +416,7 @@ def round_ending(self, chicago):
 Metodi pistetarkistukseen ja pelin päättämiseen jos pisteitä on tarpeeksi.
 """
 def points_check(self, points):
-    if points[len(points)-1] >= 10:
+    if points[len(points)-1] >= 20:
         if points[len(points)-1] > points[len(points)-2]:
             for player in self.players:
                 if self.scoreboard[player] == points[len(points)-1]:
@@ -498,6 +446,7 @@ def menu_actions(self, event, button):
                 self.winningtext = []
                 set_up_players(self)
                 set_up_scoreboard(self)
+                set_up_chicago(self)
             self.mode = 1
             self.game_to_play = 1
             random.shuffle(self.deck.cards)

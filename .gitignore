@@ -9,3 +9,4 @@
 /src/entities/__pycache__
 /src/ui/__pycache__
 /src/game_logic/__pycache__
+.vscode

@@ -99,7 +99,7 @@ class Player:
                     straight = False
                     break
         if flush and straight:
-            return (10, numbers[len(numbers)-1])
+            return (52, numbers[len(numbers)-1])
         if flush:
             return (5, numbers[len(numbers)-1])
         if straight:
