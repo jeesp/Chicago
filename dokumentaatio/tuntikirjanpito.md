@@ -24,5 +24,6 @@
 | 3.5 | 3 | Graafisen käyttöliittymän edistämistä |
 | 4.5 | 3 | Chicago-toiminnallisuuden lisääminen |
 | 5.5 | 4 | Chicago-toiminnallisuuden, pisteidenlaskun ja guin edistämistä |
-| Yht. | 76 | |
+| 5.5 | 2 | Chicagoon ja pisteidenlaskuun liittyviä bugeja korjattu |
+| Yht. | 78 | |
 
