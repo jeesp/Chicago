@@ -7,10 +7,6 @@ def start_menu(self):
     menu_object = create_menu_button(self, "Aloita")
     self.screen.blit(menu_object[1], menu_object[3])
     pygame.display.flip()
-    username = 'Hello'
-    username_surface = self.font.render(username, True, (255, 255, 255))
-    self.screen.blit(username_surface, (10, 10))
-    pygame.display.update()
     return menu_object[2]
 """
 Metodi luo loppuvalikon, josta saa aloitettua uuden pelin.
