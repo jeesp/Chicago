@@ -1,7 +1,7 @@
 import unittest
 from entities.player import Player
 from entities.deck import Deck
-from game_logic.game_actions import end_game_poker_points, play_poker, play_trick, compare_hands, end_trick, set_compare_card
+from game_logic.game_actions import play_poker, play_trick, compare_hands, end_trick, set_compare_card
 from game_logic.game_actions import play_card, round_ending, set_up_players, set_up_scoreboard, change_card, poker_points
 
 
@@ -78,32 +78,35 @@ class TestApp(unittest.TestCase):
         self.assertEqual(self.compare_card, (5, 'spades', self.player3))
         self.assertEqual(len(self.player3.hand), 0)
     def test_round_ending(self):
-        chicago = dict()
-        for player in self.players:
-            chicago[player] = 0
+        self.deals = 3
+        self.value_comparison = (0, 1, 2)
         self.scoreboard[self.player3] = 100
         self.assertEqual(round_ending(self), True)
         self.assertEqual(len(self.winningtext), 2)
         self.assertEqual(self.winningtext[0], "Peli päättynyt!")
-        self.assertEqual(self.winningtext[1], "Voittaja on: " + self.player3.name 
+        self.assertEqual(self.winningtext[1], "Voittaja on: " + self.player3.name
                          + ". Pisteet: " + str(self.scoreboard[self.player3]))
     def test_points_check(self):
         x = 0
     def test_end_game_poker_with_nothing(self):
-        end_game_poker_points(self)
-        self.assertEqual(len(self.round_ending_lines), 1)
+        self.deals = 3
+        poker_points(self)
+        self.assertEqual(len(self.poker_hand_lines), 1)
     def test_end_game_poker_with_clear_winner(self):
         self.value_comparison = (self.player3, 1, 0)
-        end_game_poker_points(self)
-        self.assertEqual(len(self.round_ending_lines), 2)
+        self.deals = 3
+        poker_points(self)
+        self.assertEqual(len(self.poker_hand_lines), 2)
     def test_end_game_poker_win_with_same_hand(self):
         self.value_comparison = (self.player3, 1, 1)
-        end_game_poker_points(self)
-        self.assertEqual(len(self.round_ending_lines), 3)
+        self.deals = 3
+        poker_points(self)
+        self.assertEqual(len(self.poker_hand_lines), 3)
     def test_end_game_poker_draw_same_hand(self):
-        self.value_comparison = (self.player3, 1, 2)
-        end_game_poker_points(self)
-        self.assertEqual(len(self.round_ending_lines), 2)
+        self.value_comparison = (0, 1, 2)
+        self.deals = 3
+        poker_points(self)
+        self.assertEqual(len(self.poker_hand_lines), 2)
     def test_poker_points_with_clear_winner(self):
         self.player.hand = [(4, 'spades', '4_of_spades'), (4, 'spades', '13_of_spades'), (
             5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]

@@ -17,8 +17,11 @@ Luokka graafiselle käyttöliittymälle, kaikki toiminnallisuudet perustuvat tä
 """
 class GUI(object):
     def __init__(self):
+        self.players = []
         set_up_players(self)
+        self.scoreboard = dict()
         set_up_scoreboard(self)
+        self.chicago = dict()
         set_up_chicago(self)
         self.hand_values = {0: "Ei mitään", 1: "Pari", 2: "Kaksi paria", 3: "Kolmoset", 4: "Suora",
                        5: "Väri", 6: "Täyskäsi", 8: "Neloset", 10: "Värisuora"}
@@ -44,14 +47,16 @@ class GUI(object):
         self.played_cards = []
         self.compare_card = None
         self.start = 0
-        self.value_comparison = (0, 0)
+        self.value_comparison = (0, 0, 0)
         self.winningtext = []
         self.chicago_on = False
         self.chicago_successful = False
         self.chicago_player = None
         self.blanco_is_on = False
         self.font = pygame.font.Font(None, 25)
+        self.poker_hand_lines = []
         self.round_ending_lines = []
+        self.points_reseted = False
     """
     Päämetodi koko sovelluksen graafisen käyttöliittymän pyörittämiselle.
     """

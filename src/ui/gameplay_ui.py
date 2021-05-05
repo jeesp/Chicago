@@ -1,5 +1,7 @@
-import pygame
 import os
+import time
+import pygame
+
 """
 Metodi piirtää kaikki kortit.
 """
@@ -223,9 +225,13 @@ def check_chicago(self):
                 blanco = True
     return [no_chicago, chicago_player, blanco]
 def print_round_ending_lines(self):
-    self.screen.fill(self.POKER_GREEN, (0,0, 800, 600))
+    refresh_round_ending_lines(self, self.round_ending_lines)
+    time.sleep(3)
+    refresh_round_ending_lines(self, self.poker_hand_lines)
+def refresh_round_ending_lines(self, lines):
+    self.screen.fill(self.POKER_GREEN, (0, 0, 800, 600))
     print_scoreboard(self)
-    print_text_lines(self, self.round_ending_lines, self.WIDTH/2, self.HEIGHT/2)
+    print_text_lines(self, lines, self.WIDTH/2, self.HEIGHT/2)
     pygame.display.update()
 def print_text_lines(self, lines, width, height):
     for line in lines:
