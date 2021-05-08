@@ -26,5 +26,6 @@
 | 5.5 | 4 | Chicago-toiminnallisuuden, pisteidenlaskun ja guin edistämistä |
 | 5.5 | 2 | Chicagoon ja pisteidenlaskuun liittyviä bugeja korjattu |
 | 6.5 | 3 | Tietokannan konfigurointi |
-| Yht. | 81 | |
+| 8.5 | 5 | Tietokannan kehittämistä, bugien korjailua |
+| Yht. | 86 | |
 
