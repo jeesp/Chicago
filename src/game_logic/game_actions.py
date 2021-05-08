@@ -180,16 +180,16 @@ def play_trick(self, event, players_cards, continue_button, chicago_object):
     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
         mouse_position = pygame.mouse.get_pos()
         trick_card_select(self, players_cards)
-        if chicago_object[0] != 0:
+        if chicago_object[0] != 0 and len(self.players[self.turn].hand) > 4:
             if chicago_object[0].collidepoint(mouse_position):
                 if not chicago_object[1]:
                     color = (0, 200, 0)
-                    draw_blanco_button(self, color)
+                    draw_chicago_button(self, color)
                     chicago_object[1] = True
                     print(chicago_object)
                 else:
                     color = (0, 0, 0)
-                    draw_blanco_button(self, color)
+                    draw_chicago_button(self, color)
                     chicago_object[1] = False
                     print(chicago_object)
             pygame.display.update()
@@ -263,7 +263,7 @@ def play_trick(self, event, players_cards, continue_button, chicago_object):
                 self.mode = 1
             self.card_selected = False
     draw_continue_button(self)
-    if chicago_object[0] != 0:
+    if chicago_object[0] != 0 and len(self.players[self.turn].hand) > 4:
         if chicago_object[1]:
             color = (0, 200, 0)
             draw_chicago_button(self, color)
@@ -429,4 +429,6 @@ def menu_actions(self, event, start_button, reset_button):
         if reset_button.collidepoint(mouse_position):
             self.highscore_repository.delete_all()
             set_up_players(self)
+            set_up_scoreboard(self)
+            set_up_chicago(self)
 

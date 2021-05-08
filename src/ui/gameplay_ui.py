@@ -45,8 +45,6 @@ def draw_other_player_cards(self, player, image, width, height, number):
             height += space_between
         else:
             width += space_between
-    
-
     self.screen.blit(player_text, player_text_rect)
 def get_player_seat(self, previous):
     new_player = previous + 1
@@ -129,7 +127,7 @@ def draw_chicago_text(self, text, button):
     if chicago_check[0]:
         if self.deals == 1:
             button = draw_blanco_button(self, black)
-        if self.game_to_play == 2 and chicago_check[0]:
+        if self.game_to_play == 2 and chicago_check[0] and len(self.players[self.turn].hand) > 4:
             button = draw_chicago_button(self, black)
     else:
         chicago_text = self.font.render(text + chicago_player.name, True, (255, 255, 255))
