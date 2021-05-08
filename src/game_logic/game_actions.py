@@ -10,18 +10,22 @@ from ui.gameplay_ui import trick_card_select, poker_card_select, print_round_end
 Metodi luo pelaajat peliin.
 """
 def set_up_players(self):
+    db_players = self.highscore_repository.get_players()
     self.players = []
-    player1 = Player('Pelaaja 1')
-    self.players.append(player1)
-    player2 = Player('Pelaaja 2')
-    self.players.append(player2)
-    player3 = Player('Pelaaja 3')
-    self.players.append(player3)
-    player4 = Player('Pelaaja 4')
-    self.players.append(player4)
+    for player in db_players:
+        player_object = Player(player[1])
+        self.players.append(player_object)
 """
 Metodi luo tulostaulun.
 """
+def add_players(self, names):
+    game_objects = []
+    for name in names:
+        self.highscore_repository.add_name(name)
+        player_id = self.highscore_repository.get_player_id(name)
+        game_objects.append([player_id, 0, 0])
+    self.highscore_repository.add_new_game(game_objects)
+        
 def set_up_scoreboard(self):
     self.scoreboard = dict()
     for player in self.players:

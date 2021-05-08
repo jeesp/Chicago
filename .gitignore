@@ -7,6 +7,7 @@
 /src/__pycache__/
 /src/tests/__pycache__/
 /src/entities/__pycache__
+/src/repository/__pycache__
 /src/ui/__pycache__
 /src/game_logic/__pycache__
 .vscode

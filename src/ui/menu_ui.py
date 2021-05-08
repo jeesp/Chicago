@@ -1,16 +1,39 @@
 import pygame
 from ui.gameplay_ui import print_scoreboard, print_text_lines
+from repository.highscore_repository import HighscoreRepository
+from database_connection import get_database_connection
 """
 Metodi luo alkuvalikon, josta saa aloitettua pelin.
 """
 def start_menu(self):
     menu_object = create_menu_button(self, "Aloita")
+    print_highscore_table(self)
     self.screen.blit(menu_object[1], menu_object[3])
-    pygame.display.flip()
+    pygame.display.update()
     return menu_object[2]
 """
 Metodi luo loppuvalikon, josta saa aloitettua uuden pelin.
 """
+def get_points(self):
+    names = self.highscore_repository.get_players()
+    pointlist = []
+    for name in names:
+        points = self.highscore_repository.get_points(name[1])
+        pointlist.append((name[1], points[0]))
+    return pointlist
+def print_highscore_table(self):
+    height = 20
+    width = 50
+    score_text = self.font.render("Kokonaispisteet:", True, (255,255,255))
+    score_text_rect = score_text.get_rect(center=(width, height))
+    height += 20
+    self.screen.blit(score_text, score_text_rect)
+    points = get_points(self)
+    for player in points:
+        score_text = self.font.render(player[0] + ": " + str(player[1][0]), True, (255, 255, 255))
+        score_text_rect = score_text.get_rect(center=(width, height))
+        height += 20
+        self.screen.blit(score_text, score_text_rect)
 def end_menu(self):
     menu_object = create_menu_button(self, "Uusi peli")
     newspace = 100

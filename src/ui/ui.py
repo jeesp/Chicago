@@ -10,13 +10,17 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.
 sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 from entities.deck import Deck
 from game_logic.game_actions import play_poker, play_trick, set_up_players, set_up_scoreboard
-from game_logic.game_actions import set_up_chicago, menu_actions
+from game_logic.game_actions import set_up_chicago, menu_actions, add_players
+from repository.highscore_repository import HighscoreRepository
+from database_connection import get_database_connection
 
 """
 Luokka graafiselle käyttöliittymälle, kaikki toiminnallisuudet perustuvat tämän luokan muuttujiin.
 """
 class GUI(object):
     def __init__(self):
+        self.highscore_repository = HighscoreRepository(get_database_connection())
+        add_players(self, ["Pelaaja 1", "Pelaaja 2", "Pelaaja 3", "Pelaaja 4"])
         self.players = []
         set_up_players(self)
         self.scoreboard = dict()
