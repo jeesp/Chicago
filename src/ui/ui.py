@@ -20,7 +20,6 @@ Luokka graafiselle käyttöliittymälle, kaikki toiminnallisuudet perustuvat tä
 class GUI(object):
     def __init__(self):
         self.highscore_repository = HighscoreRepository(get_database_connection())
-        add_players(self, ["Pelaaja 1", "Pelaaja 2", "Pelaaja 3", "Pelaaja 4"])
         self.players = []
         set_up_players(self)
         self.scoreboard = dict()
@@ -85,7 +84,9 @@ class GUI(object):
                     play_trick(self, event, players_cards, continue_button, chicago_button)
             if self.mode == 0:
                 button = start_menu(self)
-                menu_actions(self, event, button)
+                start_button = button[0]
+                reset_button = button[1]
+                menu_actions(self, event, start_button, reset_button)
             if self.mode == 1:
                 draw_window(self)
                 players_cards = get_player_cards(self, self.players[self.turn])
@@ -94,7 +95,9 @@ class GUI(object):
                 chicago_button = players_cards[3]
                 players_cards = players_cards[0]
             if self.mode == 2:
-                button = end_menu(self)
-                menu_actions(self, event, button)
+                button = start_menu(self)
+                start_button = button[0]
+                reset_button = button[1]
+                menu_actions(self, event, start_button, reset_button)
         pygame.quit()
         

@@ -11,6 +11,9 @@ Metodi luo pelaajat peliin.
 """
 def set_up_players(self):
     db_players = self.highscore_repository.get_players()
+    if len(db_players) == 0:
+        add_players(self, ["Pelaaja 1", "Pelaaja 2", "Pelaaja 3", "Pelaaja 4"])
+        db_players = self.highscore_repository.get_players()
     self.players = []
     for player in db_players:
         player_object = Player(player[1])
@@ -231,6 +234,7 @@ def play_trick(self, event, players_cards, continue_button, chicago_object):
                     end_trick(self)
                     self.compare_card = None
                     if round_ending(self):
+                        self.highscore_repository.create_game_object(self)
                         self.mode = 2
                         self.turn = 0
                         self.deals = 0
@@ -407,14 +411,11 @@ def points_check(self, points):
 """
 Metodi alku- ja loppuvalikon toimintoja varten.
 """
-def menu_actions(self, event, button):
+def menu_actions(self, event, start_button, reset_button):
     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
         mouse_position = pygame.mouse.get_pos()
-        if button.collidepoint(mouse_position):
+        if start_button.collidepoint(mouse_position):
             if self.mode == 2:
-                print("")
-                print("Uusi peli aloitettu")
-                print("")
                 self.winningtext = []
                 set_up_players(self)
                 set_up_scoreboard(self)
@@ -425,3 +426,7 @@ def menu_actions(self, event, button):
             random.shuffle(self.deck.cards)
             self.deck.deal_cards(self.players)
             poker_points(self)
+        if reset_button.collidepoint(mouse_position):
+            self.highscore_repository.delete_all()
+            set_up_players(self)
+

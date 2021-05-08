@@ -7,8 +7,6 @@ class HighscoreRepository:
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM players")
         rows = cursor.fetchall()
-        for row in rows:
-            print(row[0], row[1])
         return rows
     def get_latest_game(self):
         cursor = self.connection.cursor()
@@ -26,8 +24,6 @@ class HighscoreRepository:
         if player_id in [1,2,3,4]:
             cursor.execute("SELECT SUM(points) FROM games WHERE player_id = (?)", (player_id,))
             rows = cursor.fetchall()
-            for row in rows:
-                print(row[0])
             return rows
         else:
             return 0
@@ -40,7 +36,7 @@ class HighscoreRepository:
         game_objects = []
         for player in app.players:
             player_id = self.get_player_id(player.name)
-            game_objects.append([player_id, game_id, app.points[player]])
+            game_objects.append([player_id, game_id, app.scoreboard[player]])
         self.add_new_game(game_objects)
     def add_new_game(self, game_object):
         cursor = self.connection.cursor()
@@ -49,6 +45,6 @@ class HighscoreRepository:
         self.connection.commit()
     def delete_all(self):
         cursor = self.connection.cursor()
-        cursor.execute("DELETE * FROM players")
-        cursor.execute("DELETE * FROM games")
+        cursor.execute("DELETE FROM players")
+        cursor.execute("DELETE FROM games")
 highscore_repository = HighscoreRepository(get_database_connection)
