@@ -5,31 +5,31 @@ from database_connection import get_database_connection
 """
 Metodi luo alkuvalikon, josta saa aloitettua pelin.
 """
-def start_menu(self):
+def start_menu(self, app):
     self.screen.fill(self.POKER_GREEN, (0, 0, 800, 600))
     menu_object = create_menu_button(self, "Aloita", self.WIDTH/2, self.HEIGHT/2)
     self.screen.blit(menu_object[1], menu_object[3])
-    reset_button = print_highscore_table(self)
+    reset_button = print_highscore_table(self, app)
     pygame.display.update()
     return (menu_object[2], reset_button)
 """
 Metodi luo loppuvalikon, josta saa aloitettua uuden pelin.
 """
-def get_points(self):
-    names = self.highscore_repository.get_players()
+def get_points(app):
+    names = app.highscore_repository.get_players()
     pointlist = []
     for name in names:
-        points = self.highscore_repository.get_points(name[1])
+        points = app.highscore_repository.get_points(name[1])
         pointlist.append((name[1], points[0]))
     return pointlist
-def print_highscore_table(self):
+def print_highscore_table(self, app):
     height = 20
     width = 100
     score_text = self.font.render("Kokonaispisteet:", True, (255,255,255))
     score_text_rect = score_text.get_rect(center=(width, height))
     height += 20
     self.screen.blit(score_text, score_text_rect)
-    points = get_points(self)
+    points = get_points(app)
     for player in points:
         score_text = self.font.render(player[0] + ": " + str(player[1][0]), True, (255, 255, 255))
         score_text_rect = score_text.get_rect(center=(width, height))
@@ -38,18 +38,18 @@ def print_highscore_table(self):
     height += 30
     highscore_button = create_menu_button(self, "Nollaa", width, height)
     return highscore_button[2]
-def end_menu(self):
+def end_menu(self, app):
     self.screen.fill(self.POKER_GREEN, (0, 0, 800, 600))
     menu_object = create_menu_button(self, "Uusi peli", self.WIDTH/2, self.HEIGHT/2)
     newspace = 100
-    for winningtext in self.winningtext:
+    for winningtext in app.winningtext:
         winning_text_line = menu_object[0].render(winningtext, True, (255, 255, 255))
         newline_rect = winning_text_line.get_rect(center=(menu_object[2].center))
         newline_rect.y += newspace
         newspace += 20
         self.screen.blit(winning_text_line, newline_rect)
-    reset_button = print_highscore_table(self)
-    print_scoreboard(self)
+    reset_button = print_highscore_table(self, app)
+    print_scoreboard(self, app)
     pygame.display.update()
     return (menu_object[2], reset_button)
 """
