@@ -4,19 +4,17 @@ import sys
 import random
 import pygame
 from ui.menu_ui import start_menu, end_menu
-from ui.gameplay_ui import draw_window, get_player_cards, draw_continue_button
+from ui.gameplay_ui import draw_window, get_player_cards
 PACKAGE_PARENT = '..'
 SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
 sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
-from entities.deck import Deck
 
-
-"""
-Luokka graafiselle käyttöliittymälle, kaikki toiminnallisuudet perustuvat tämän luokan muuttujiin.
-"""
 class GUI:
+    """
+    Luokka graafiselle käyttöliittymälle. Konstruktorissa alustetaan pelitila
+    ja graafiseen ilmeeseen liittyvät asiat.
+    """
     def __init__(self):
-        
         pygame.init()
         pygame.display.set_caption('Chicago')
         self.WIDTH = 800
@@ -25,7 +23,8 @@ class GUI:
         self.FPS = 15
         self.current_path = os.path.dirname(__file__)
         self.CARD_SIZE = (80, 120)
-        self.CARD_IMAGE = pygame.image.load(os.path.join(os.path.dirname(self.current_path), 'assets', 'cards', 'back-side.png'))
+        self.CARD_IMAGE = pygame.image.load(os.path.join(os.path.dirname(self.current_path),
+                                                         'assets', 'cards', 'back-side.png'))
         self.CARD = pygame.transform.scale(self.CARD_IMAGE, self.CARD_SIZE)
         self.SIDE_CARD = pygame.transform.rotate(self.CARD, 90)
         self.POKER_GREEN = (53, 101, 77)
@@ -33,11 +32,10 @@ class GUI:
         self.font = pygame.font.Font(None, 25)
         self.card_selected = False
         self.game_to_play = 0
-        
-    """
-    Päämetodi koko sovelluksen graafisen käyttöliittymän pyörittämiselle.
-    """
     def main(self, app):
+        """
+        Päämetodi koko sovelluksen graafisen käyttöliittymän pyörittämiselle.
+        """
         clock = pygame.time.Clock()
         players_cards = []
         continue_button = 0

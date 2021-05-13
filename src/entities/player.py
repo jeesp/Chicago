@@ -1,19 +1,19 @@
-"""
-Luokka pelaajalle. Pelaajalla on nimi ja käsi.
-"""
 class Player:
+    """
+    Luokka pelaajalle. Pelaajalla on nimi ja käsi.
+    """
     def __init__(self, name):
         self.name = name
         self.hand = []
-    """
-    Metodi poistaa kortin pelaajan kädestä.
-    """
     def remove_card(self, card):
+        """
+        Metodi poistaa kortin pelaajan kädestä.
+        """
         self.hand.remove(card)
-    """
-    Metodi laskee pelaajan käden arvon.
-    """
     def hand_value(self):
+        """
+        Metodi laskee pelaajan käden arvon.
+        """
         player = self
         suits = set()
         numbers = []
@@ -26,10 +26,10 @@ class Player:
         if self.check_same_numbers(numbers) is not None:
             return self.check_same_numbers(numbers)
         return (0, 0)
-    """
-    Metodi tarkistaa onko kädessä arvoltaan samoja kortteja.
-    """
     def check_same_numbers(self, numbers):
+        """
+        Metodi tarkistaa onko kädessä arvoltaan samoja kortteja.
+        """
         same_numbers = dict()
         for i in range(0, 5):
             if numbers[i] not in same_numbers:
@@ -56,10 +56,10 @@ class Player:
             return Player.check_pairs_and_three_of_a_kind(self, same_numbers,
                                                           three_of_a_kind, two_pairs, pair)
         return None
-    """
-    Metodi tarkistaa parit ja kolmoset.
-    """
     def check_pairs_and_three_of_a_kind(self, same_numbers, three_of_a_kind, two_pairs, pair):
+        """
+        Metodi tarkistaa parit ja kolmoset.
+        """
         if three_of_a_kind:
             for number in same_numbers:
                 if same_numbers[number] == 3:
@@ -71,10 +71,10 @@ class Player:
                 if same_numbers[number] == 2:
                     return (1, number)
         return None
-    """
-    Metodi tarkistaa värin ja suoran.
-    """
     def check_straight_and_flush(self, suits, numbers):
+        """
+        Metodi tarkistaa värin ja suoran.
+        """
         flush = False
         straight = True
         if len(suits) == 1:
