@@ -27,5 +27,6 @@
 | 5.5 | 2 | Chicagoon ja pisteidenlaskuun liittyviä bugeja korjattu |
 | 6.5 | 3 | Tietokannan konfigurointi |
 | 8.5 | 5 | Tietokannan kehittämistä, bugien korjailua |
-| Yht. | 86 | |
+| 13.5 | 6 | Koodin refaktorointia, testien lisäilyä, toimivuuden varmistamista. |
+| Yht. | 92 | |
 
