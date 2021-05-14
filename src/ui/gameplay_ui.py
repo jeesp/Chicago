@@ -98,6 +98,8 @@ def get_player_cards(self, app, player):
         print_chicago_text(self, app, chicago_check)
     if self.game_to_play == 2:
         print_trick_compare_text(self, app)
+    if app.blanco_is_on and self.game_to_play == 1:
+        print_text_top_middle(self, "Valitse vähintään yksi kortti blancoa varten.")
     continue_button = draw_continue_button(self)
     pygame.display.update()
     blanco_object = [blanco_button, False]
@@ -133,9 +135,12 @@ def print_chicago_text(self, app, chicago_check):
         text_for_chicago = "Blanco huudettu! Blancon huusi "
     chicago_check = app.check_chicago()
     chicago_player = chicago_check[1]
-    chicago_text = self.font.render(text_for_chicago + chicago_player.name, True, (255, 255, 255))
-    chicago_text_rect = chicago_text.get_rect(center=(self.WIDTH/2, self.HEIGHT/2-100))
-    self.screen.blit(chicago_text, chicago_text_rect)
+    print_text_top_middle(self, text_for_chicago + chicago_player.name)
+
+def print_text_top_middle(self, text):
+    text_object = self.font.render(text, True, (255, 255, 255))
+    text_rect = text_object.get_rect(center=(self.WIDTH/2, self.HEIGHT/2-100))
+    self.screen.blit(text_object, text_rect)
 def print_trick_compare_text(self, app):
     """
     Metodi piirtää näytölle tekstin pelatusta chicago-kortista.
@@ -168,9 +173,7 @@ def draw_chicago_text(self, app, text, button):
         if self.game_to_play == 2 and chicago_check[0] and len(app.players[app.turn].hand) > 4:
             button = draw_chicago_button(self, black)
     else:
-        chicago_text = self.font.render(text + chicago_player.name, True, (255, 255, 255))
-        chicago_text_rect = chicago_text.get_rect(center=(self.WIDTH/2, self.HEIGHT/2-100))
-        self.screen.blit(chicago_text, chicago_text_rect)
+        print_text_top_middle(self, text + chicago_player.name)
     return button
 def draw_continue_button(self):
     """
@@ -214,23 +217,29 @@ def draw_coloured_button(self, color, text):
     text_rect = text.get_rect(center=(button.center))
     self.screen.blit(text, text_rect)
     return button
-def trick_card_select(self, players_cards):
+def trick_card_select(self, app, players_cards):
     """
     Metodi tikin kortinvalinnalle.
     """
     mouse_position = pygame.mouse.get_pos()
+    not_same_suits = True
+    if app.compare_card is not None:
+        for card in players_cards:
+            if card[0][1] is app.compare_card[1]:
+                not_same_suits = False
     for card in players_cards:
         if card[1].collidepoint(mouse_position):
-            draw_green_on_card(self, card)
-            x_change = 5
-            y_change = 15
-            if not card[3] and not self.card_selected:
-                lift_card_up(self, card, x_change, y_change)
-                self.card_selected = True
-            elif card[3] and self.card_selected:
-                put_card_down(card, x_change, y_change)
-                self.card_selected = False
-            update_card(self, card)
+            if app.compare_card is None or card[0][1] is app.compare_card[1] or not_same_suits:
+                draw_green_on_card(self, card)
+                x_change = 5
+                y_change = 15
+                if not card[3] and not self.card_selected:
+                    lift_card_up(self, card, x_change, y_change)
+                    self.card_selected = True
+                elif card[3] and self.card_selected:
+                    put_card_down(card, x_change, y_change)
+                    self.card_selected = False
+                update_card(self, card)
 def poker_card_select(self, players_cards):
     """
     Metodi pokerin kortinvalinnalle.

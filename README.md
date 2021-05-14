@@ -1,7 +1,10 @@
 <h1> Chigago-sovellus </h1>
 
-Sovelluksessa 4 käyttäjää pystyy pelaamaan vastakkain Chicago-korttipeliä. Chicagossa pelataan aluksi 2 kierrosta pokeria ja kierros päätetään tikkiin. Kummankin pokerikierroksen jälkeen pelaajan on mahdollista vaihtaa enintään 4 korttia. Wikipedia: https://fi.wikipedia.org/wiki/Chicago_(korttipeli)
+Sovelluksessa 4 käyttäjää pelaa vastakkain Chicago-korttipeliä. Chicagossa pelataan aluksi 2 kierrosta pokeria ja kierros päätetään tikkiin. Sovelluksessa on noudatettu seuraavia ohjeita:
 
+Wikipedia: https://fi.wikipedia.org/wiki/Chicago_(korttipeli)
+
+Testauksen helpottamiseksi vuorojen välissä ei ole viivettä ja peli on asetettu päättymään 5 pisteeseen. Pelin päättävää pistemäärää voi halutessaan muuttaa src/game_actions-tiedostosta App-luokan metodista points_check.
 <h3> Python-versio </h3>
 Sovelluksen toimintaa on testattu Python-versiolla 3.6.0. Vanhempien Python-versioiden kanssa saattaa esiintyä ongelmia. 
 
@@ -23,6 +26,14 @@ Sovelluksen toimintaa on testattu Python-versiolla 3.6.0. Vanhempien Python-vers
 
 ```bash
 poetry install
+```
+
+Ohjeet Poetryn lataamiseen löydät tarvittaessa esimerkiksi [täältä](https://ohjelmistotekniikka-hy.github.io/python/poetry)
+
+2. Alusta tietokanta komennolla:
+
+```bash
+poetry run invoke build
 ```
 
 <h3> Sovelluksen käyttö </h3>
