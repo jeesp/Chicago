@@ -29,5 +29,5 @@
 | 8.5 | 5 | Tietokannan kehittämistä, bugien korjailua |
 | 13.5 | 6 | Koodin refaktorointia, testien lisäilyä, toimivuuden varmistamista. |
 | 14.5 | 3 | Testikattavuuden lisäystä. |
-| Yht. | 92 | |
+| Yht. | 95 | |
 
