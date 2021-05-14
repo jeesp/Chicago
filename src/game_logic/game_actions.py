@@ -274,8 +274,6 @@ class App:
             self.turn = 0
         if self.turn == self.start:
             self.trick_round_end_actions()
-        if self.gui.game_to_play == 2:
-            print(self.players[self.turn].name)
         if self.gui.mode == 3:
             self.gui.mode = 1
         self.gui.card_selected = False
@@ -453,9 +451,6 @@ class App:
         points.sort()
         if self.points_check(points):
             return True
-        print("")
-        print("Uusi kierros.")
-        print("")
         return False
     def points_check(self, points):
         """
@@ -471,10 +466,10 @@ class App:
             if points[len(points)-1] == points[len(points)-2]:
                 self.winningtext.append("Pisteraja ylitetty,"
                                         + "mutta osalla pelaajista on tasatilanne.")
-                self.winningtext.append("Pelaajat tasatilanteessa: ", end=" ")
+                self.winningtext.append("Pelaajat tasatilanteessa: ")
                 for player in self.players:
                     if self.scoreboard[player] == points[len(points)-1]:
-                        self.winningtext.append(player.name + " ", end=" ")
+                        self.winningtext.append(player.name)
                 self.winningtext.append("Pisteillä: " + str(points[len(points)-1]))
             return True
         return False

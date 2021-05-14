@@ -7,9 +7,9 @@ from game_logic.game_actions import App
 class TestApp(unittest.TestCase):
     def setUp(self):
         self.app = App()
-        self.app.player = Player("Jake")
-        self.app.player2 = Player("Make")
-        self.app.player3 = Player("Ake")
+        self.app.player = Player("Pelaaja 1")
+        self.app.player2 = Player("Pelaaja 2")
+        self.app.player3 = Player("Pelaaja 3")
         self.app.scoreboard = {self.app.player: 0, self.app.player2: 0, self.app.player3: 0}
         self.app.hand_values = {0: "Ei mitään", 1: "Pari", 2: "Kaksi paria", 3: "Kolmoset", 4: "Suora",
                            5: "Väri", 6: "Täyskäsi", 8: "Neloset", 52: "Värisuora"}
@@ -47,6 +47,48 @@ class TestApp(unittest.TestCase):
     def test_set_up_scoreboard(self):
         self.app.set_up_scoreboard()
         self.assertEqual(len(self.app.scoreboard), 3)
+    def test_change_from_poker_to_trick_with_blanco(self):
+        self.app.player.hand = [(4, 'spades', '4_of_spades'), (4, 'spades', '13_of_spades'), (
+            5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
+        self.app.player2.hand = [(4, 'spades', '4_of_spades'), (13, 'spades', '13_of_spades'), (
+            5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
+        self.app.player3.hand = [(4, 'spades', '4_of_spades'), (13, 'spades', '13_of_spades'), (
+            5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
+        self.app.chicago[self.app.player2] = 2
+        self.app.change_mode_from_poker_to_trick()
+        self.assertEqual(self.app.start, self.app.players.index(self.app.player2))
+    def test_change_from_poker_to_trick_without_blanco(self):
+        self.app.player.hand = [(4, 'spades', '4_of_spades'), (4, 'spades', '13_of_spades'), (
+            5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
+        self.app.player2.hand = [(4, 'spades', '4_of_spades'), (13, 'spades', '13_of_spades'), (
+            5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
+        self.app.player3.hand = [(4, 'spades', '4_of_spades'), (13, 'spades', '13_of_spades'), (
+            5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
+        self.app.change_mode_from_poker_to_trick()
+        self.assertEqual(self.app.start, self.app.players.index(self.app.player))
+    def test_trick_chicago_setup(self):
+        self.app.trick_chicago_set_actions()
+        self.assertEqual(self.app.chicago_on, True)
+        self.assertEqual(self.app.start, 0)
+        self.assertEqual(self.app.chicago_player, self.app.players[0])
+        self.assertEqual(self.app.compare_card, None)
+        self.assertEqual(self.app.chicago_successful, True)
+    def test_trick_round_ending_no_cards_left(self):
+        self.app.compare_card = (5, 'spades', self.app.player3)
+        self.app.trick_round_end_actions()
+        self.assertEqual(self.app.start, self.app.dealing_turn)
+        self.assertEqual(self.app.deals, 0)
+    def test_trick_round_ending_with_cards(self):
+        self.app.player.hand = [(4, 'spades', '4_of_spades'), (4, 'spades', '13_of_spades'), (
+            5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
+        self.app.player2.hand = [(4, 'spades', '4_of_spades'), (13, 'spades', '13_of_spades'), (
+            5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
+        self.app.player3.hand = [(4, 'spades', '4_of_spades'), (13, 'spades', '13_of_spades'), (
+            5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
+        self.app.compare_card = (5, 'spades', self.app.player3)
+        self.app.trick_round_end_actions()
+        self.assertEqual(self.app.players[self.app.start], self.app.player3)
+        self.assertEqual(self.app.compare_card, None)
     def test_play_first_card(self):
         self.app.compare_card = None
         played_card = (5, 'spades', self.app.player3)
@@ -86,8 +128,21 @@ class TestApp(unittest.TestCase):
         self.assertEqual(self.app.winningtext[0], "Peli päättynyt!")
         self.assertEqual(self.app.winningtext[1], "Voittaja on: " + self.app.player3.name
                          + ". Pisteet: " + str(self.app.scoreboard[self.app.player3]))
-    def test_points_check(self):
-        x = 0
+    def test_points_check_two_winners(self):
+        self.app.scoreboard = {self.app.player: 60, self.app.player2: 60, self.app.player3: 0}
+        points = [0, 60, 60]
+        self.app.points_check(points)
+        self.assertEqual(len(self.app.winningtext), 5)
+    def test_points_check_no_winner(self):
+        self.app.scoreboard = {self.app.player: 0, self.app.player2: 0, self.app.player3: 0}
+        points = [0, 0, 0]
+        
+        self.assertEqual(self.app.points_check(points), False)   
+    def test_points_check_one_winner(self):
+        self.app.scoreboard = {self.app.player: 60, self.app.player2: 0, self.app.player3: 0}
+        points = [0, 0, 60]
+        self.app.points_check(points)
+        self.assertEqual(len(self.app.winningtext), 2)
     def test_end_game_poker_with_nothing(self):
         self.app.deals = 3
         self.app.poker_points()
@@ -143,6 +198,28 @@ class TestApp(unittest.TestCase):
             5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
         self.app.poker_points()
         self.assertEqual(len(self.app.poker_hand_lines), 2)
+    def test_poker_points_straight_flush(self):
+        self.app.scoreboard = {self.app.player: 15, self.app.player2: 15, self.app.player3: 15}
+        self.app.player.hand = [(4, 'spades', '4_of_spades'), (5, 'spades', '13_of_spades'), (
+            6, 'spades', '4_of_spades'), (7, 'spades', '8_of_spades'), (8, 'spades', '4_of_spades')]
+        self.app.player2.hand = [(4, 'spades', '4_of_spades'), (4, 'spades', '13_of_spades'), (
+            5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
+        self.app.player3.hand = [(4, 'spades', '4_of_spades'), (13, 'spades', '13_of_spades'), (
+            5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
+        self.app.poker_points()
+        self.assertEqual(self.app.scoreboard[self.app.player], 15+52)
+        self.assertEqual(self.app.scoreboard[self.app.player2], 0)
+    def test_poker_points_four_of_a_kind(self):
+        self.app.scoreboard = {self.app.player: 15, self.app.player2: 15, self.app.player3: 15}
+        self.app.player.hand = [(4, 'spades', '4_of_spades'), (4, 'spades', '13_of_spades'), (
+            4, 'spades', '4_of_spades'), (4, 'spades', '8_of_spades'), (8, 'clubs', '4_of_spades')]
+        self.app.player2.hand = [(4, 'spades', '4_of_spades'), (4, 'spades', '13_of_spades'), (
+            5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
+        self.app.player3.hand = [(4, 'spades', '4_of_spades'), (13, 'spades', '13_of_spades'), (
+            5, 'clubs', '5_of_clubs'), (8, 'spades', '8_of_spades'), (3, 'hearts', '3_of_hearts')]
+        self.app.poker_points()
+        self.assertEqual(self.app.scoreboard[self.app.player], 15+8)
+        self.assertEqual(self.app.scoreboard[self.app.player2], 0)
     def test_end_trick_succesful_blanco(self):
         self.app.chicago_on = True
         self.app.chicago_successful = True
@@ -260,7 +337,6 @@ class TestApp(unittest.TestCase):
         hv2 = self.app.player2.hand_value()
         hv3 = self.app.player3.hand_value()
         self.assertEqual(TestApp.compare(self, hv1, hv2, hv3), (self.app.player, 4, 0))
-
     def test_comparing_flush(self):
         self.app.player.hand = [(4, 'spades', '4_of_spades'), (5, 'spades', '5_of_spades'), (6, 'spades', '6_of_spades'),
         (7, 'spades', '7_of_spades'),(9, 'spades', '9_of_spades'),]
