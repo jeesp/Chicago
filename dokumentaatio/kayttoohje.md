@@ -1,5 +1,7 @@
 <h1>Käyttöohje</h2>
 
+Lataa sovelluksen uusin versio [täältä](https://github.com/jeesp/ot-harjoitustyo/releases/tag/Viikko7).
+
 <h3> Konfigurointi </h3>
 
 1. Asenna riippuvuudet komennolla:
@@ -8,7 +10,7 @@
 poetry install
 ```
 
-Ohjeet Poetryn lataamiseen löydät tarvittaessa esimerkiksi [täältä](https://ohjelmistotekniikka-hy.github.io/python/poetry)
+Ohjeet Poetryn lataamiseen löydät tarvittaessa esimerkiksi [täältä](https://ohjelmistotekniikka-hy.github.io/python/poetry).
 
 2. Alusta tietokanta komennolla:
 
