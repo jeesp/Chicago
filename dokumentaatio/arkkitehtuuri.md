@@ -23,7 +23,11 @@ Toiminnallisuus on eriytettynä pakkauksen <i>game_logic</i> tiedostoon <i>game_
 Graafisessa käyttöliittymässä on luokka <i>GUI</i>, joka löytyy tiedostosta <i>ui</i> sekä avustavat tiedostot <i>menu_ui</i> ja <i>gameplay_ui</i>. Sovelluslogiikkaa suorittaa luokka <i>App</i>. <br>
 ![Luokkakaavio](./kuvat/luokkakaavio.png)
 
-<h2> Sekvenssikaavio </h2>
+<h2> Sekvenssikaaviot </h2>
 
 Sekvenssikaaviossa esitettynä sovelluksen käynnistäminen. Muissa toiminnoissa kutsut toimivat näiden luokkien välillä. <br>
 ![Sekvenssikaavio](./kuvat/sekvenssikaavio.png)
+
+Toisessa sekvenssikaaviossa esitettynä pokerijako: <br>
+
+![Sekvenssikaavio2](./kuvat/sekvenssikaavio2.png)
