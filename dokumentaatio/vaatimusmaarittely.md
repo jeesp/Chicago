@@ -23,7 +23,6 @@ Chicago (onnistunut/epäonnistunut): 15/-15 <br>
 Blanco-chicago (onnistunut/epäonnistunut): 30/-30
 
 ## Todo-lista
-Sovelluslogiikka
 - [x] Pokerin pisteytykset
 - [x] Pokerikierrokset/logiikka
 - [x] Korttien vaihtaminen

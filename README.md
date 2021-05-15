@@ -20,6 +20,8 @@ Sovelluksen toimintaa on testattu Python-versiolla 3.6.0. Vanhempien Python-vers
 
 [Arkkitehtuuri](https://github.com/jeesp/ot-harjoitustyo/blob/main/dokumentaatio/arkkitehtuuri.md)
 
+[Käyttöohje](https://github.com/jeesp/ot-harjoitustyo/blob/main/dokumentaatio/kayttoohje.md)
+
 <h3> Asennus </h3>
 
 1. Asenna riippuvuudet komennolla:
