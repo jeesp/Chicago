@@ -471,7 +471,7 @@ class App:
         Metodi pistetarkistukseen ja pelin päättämiseen jos pisteitä on tarpeeksi. 
         Tästä metodista voi myös nostaa/laskea pistemäärää, jonka ylityksestä peli päättyy. 
         """
-        if points[len(points)-1] >= 5:
+        if points[len(points)-1] >= 10:
             if points[len(points)-1] > points[len(points)-2]:
                 for player in self.players:
                     if self.scoreboard[player] == points[len(points)-1]:
