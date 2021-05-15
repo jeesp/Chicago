@@ -2,7 +2,7 @@
 
 <h2>Rakenne</h2>
 
-Ohjelmassa on eriytettynä neljä eri hakemistoa: <br>
+Ohjelmassa on eriytettynä neljä eri pakkausta: <br>
 ![Rakennekuvaus](./kuvat/rakennekuvaus.png)
 <br>
 Pakkaus <i>ui</i> sisältää graafisen käyttöliittymän tiedostot. <br>
@@ -20,10 +20,10 @@ Toiminnallisuus on eriytettynä pakkauksen <i>game_logic</i> tiedostoon <i>game_
 
 <h2> Luokkakaavio</h2>
 
-Graafisessa käyttöliittymässä on luokka <i>GUI</i>, joka löytyy tiedostosta <i>ui</i> sekä avustavat tiedostot <i>menu_ui</i> ja <i>gameplay_ui</i>. Sovelluslogiikkaa suorittaa luokka <i>App</i>.
+Graafisessa käyttöliittymässä on luokka <i>GUI</i>, joka löytyy tiedostosta <i>ui</i> sekä avustavat tiedostot <i>menu_ui</i> ja <i>gameplay_ui</i>. Sovelluslogiikkaa suorittaa luokka <i>App</i>. <br>
 ![Luokkakaavio](./kuvat/luokkakaavio.png)
 
 <h2> Sekvenssikaavio </h2>
 
-Sekvenssikaaviossa esitettynä sovelluksen käynnistäminen. Muissa toiminnoissa kutsut toimivat näiden luokkien välillä.
+Sekvenssikaaviossa esitettynä sovelluksen käynnistäminen. Muissa toiminnoissa kutsut toimivat näiden luokkien välillä. <br>
 ![Sekvenssikaavio](./kuvat/sekvenssikaavio.png)
