@@ -22,7 +22,3 @@ class TestDatabase(unittest.TestCase):
         self.app.highscore_repository.add_new_game(game_objects)
         self.assertEqual(self.app.highscore_repository.get_latest_game(), 2)
         self.assertEqual(self.app.highscore_repository.get_points("Pelaaja 1"), 52)
-    #def test_create_game_object(self):
-    #    print(self.app.highscore_repository.get_players())
-    #    self.app.highscore_repository.create_game_object(self.app)
-    #    self.assertEqual(self.app.highscore_repository.get_latest_game(), 1)
