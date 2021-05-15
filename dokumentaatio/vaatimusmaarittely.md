@@ -35,8 +35,8 @@ Sovelluslogiikka
 - [x] Graafinen käyttöliittymä 1. pokerinäkymä
 - [x] Graafinen käyttöliittymä 2. vaihtonäkymä
 - [x] Graafinen käyttöliittymä tikkinäkymä
-- [ ] Graafinen käyttöliittymä tulostaulu
-- [/] Graafisen käyttöliittymän liittäminen osaksi sovellusta
+- [x] Graafinen käyttöliittymä tulostaulu
+- [x] Graafisen käyttöliittymän liittäminen osaksi sovellusta
 - [x] Graafinen käyttöliittymä alkunäkymä
 - [x] Graafinen käyttöliittymä lopetusnäkymä
 - [x] Chicago graafisessa käyttöliittymässä
