@@ -1,6 +1,23 @@
 <h1>Käyttöohje</h2>
+
+<h3> Konfigurointi </h3>
+
+1. Asenna riippuvuudet komennolla:
+
+```bash
+poetry install
+```
+
+Ohjeet Poetryn lataamiseen löydät tarvittaessa esimerkiksi [täältä](https://ohjelmistotekniikka-hy.github.io/python/poetry)
+
+2. Alusta tietokanta komennolla:
+
+```bash
+poetry run invoke build
+```
+
 <h2> Pelin käynnistys </h2>
-README:n ohjeiden avulla saat aluksi tarvittavat konfiguraatiot tehtyä. Kun avaat sovelluksen komennolla <i>poetry invoke run start</i>, näytöllesi aukeaa graafinen käyttöliittymä, joka näyttöö seuraavalta:
+Kun olet suorittanut konfiguraatiot, voit avata sovelluksen komennolla <i>poetry invoke run start</i>. Näytöllesi aukeaa graafinen käyttöliittymä, joka näyttää seuraavalta:
 
 ![Aloitusnäkymä](./kuvat/aloitusnakyma.png)
 
