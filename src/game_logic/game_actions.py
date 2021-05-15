@@ -7,7 +7,6 @@ from repository.highscore_repository import HighscoreRepository
 from database_connection import get_database_connection
 from ui.gameplay_ui import draw_coloured_button, draw_continue_button, remove_played_cards
 from ui.gameplay_ui import trick_card_select, poker_card_select, print_round_ending_lines
-from ui.gameplay_ui import print_text_top_middle
 from ui.ui import GUI
 
 
@@ -207,7 +206,8 @@ class App:
             self.actions_after_poker_change(cards_clicked)
     def actions_after_poker_change(self, cards_clicked):
         """
-        Metodi pokerikierroksen "Jatka"-painikkeen toimintojen suorittamiseen, mikäli jatkaminen onnistuu.
+        Metodi pokerikierroksen "Jatka"-painikkeen toimintojen suorittamiseen,
+        mikäli jatkaminen onnistuu.
         """
         pygame.display.update()
         self.change_card(self.players[self.turn], cards_clicked)
@@ -468,8 +468,8 @@ class App:
         return False
     def points_check(self, points):
         """
-        Metodi pistetarkistukseen ja pelin päättämiseen jos pisteitä on tarpeeksi. 
-        Tästä metodista voi myös nostaa/laskea pistemäärää, jonka ylityksestä peli päättyy. 
+        Metodi pistetarkistukseen ja pelin päättämiseen jos pisteitä on tarpeeksi.
+        Tästä metodista voi myös nostaa/laskea pistemäärää, jonka ylityksestä peli päättyy.
         """
         if points[len(points)-1] >= 10:
             if points[len(points)-1] > points[len(points)-2]:
