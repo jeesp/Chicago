@@ -3,7 +3,7 @@
 <h2>Rakenne</h2>
 
 Ohjelmassa on eriytettynä kolme eri pakkausta:
-![Rakennekuvaus](./kuvat/rakennekuvaus.jpg)
+![Rakennekuvaus](./kuvat/rakennekuvaus.png)
 Pakkaus <i>ui</i> sisältää graafisen käyttöliittymän tiedostot. Pakkaus <i>entities</i> sisältää luokat pelaajalle ja korttipakalle. Pakkaus <i>game_logic</i> puolestaan sisältää pelin toiminnallisuudet.
 
 <h2>Käyttöliittymä</h2>
@@ -17,10 +17,10 @@ Toiminnallisuus on eriytettynä pakkauksen <i>game_logic</i> tiedostoon <i>game_
 
 <h2> Luokkakaavio</h2>
 
-Luokkakaavio ennen graafista käyttöliittymää. Graafisessa käyttöliittymässä on pääluokka <i>GUI</i>, joka löytyy tiedostosta <i>ui</i> sekä avustavat tiedostot <i>menu_ui</i> ja <i>gameplay_ui</i>
-![Luokkakaavio](./kuvat/luokkakaavio.jpg)
+Graafisessa käyttöliittymässä on luokka <i>GUI</i>, joka löytyy tiedostosta <i>ui</i> sekä avustavat tiedostot <i>menu_ui</i> ja <i>gameplay_ui</i>. Sovelluslogiikkaa suorittaa luokka App.
+![Luokkakaavio](./kuvat/luokkakaavio.png)
 
 <h2> Sekvenssikaavio </h2>
 
 Sekvenssikaaviossa esitettynä pokerikäden vertailu ja korttien jakaminen tekstikäyttöliittymästä. <i>game_logic</i>-tiedosto on sittemmin vaihtunut graafiseen käyttöliittymään, eli luokasta <i>GUI</i> kutsutaan pakkauksen <i> entities </i> luokkia <i>player</i> ja <i>deck</i>.
-![Sekvenssikaavio](./kuvat/sekvenssikaavio.jpg)
+![Sekvenssikaavio](./kuvat/sekvenssikaavio.png)
