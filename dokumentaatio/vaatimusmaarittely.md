@@ -42,3 +42,14 @@ Blanco-chicago (onnistunut/epäonnistunut): 30/-30
 - [x] Blancochicago graafisessa käyttöliittymässä
 - [x] Kokonaispistemäärä tietokannasta
 
+## Jatkokehitysideoita
+
+- Sovelluksen siirtäminen netin välityksellä pelattavaksi
+- Pelaajamäärän muuttaminen (Pakan loppuessa vaihtokorteista kortin ottaminen toteutuu jo)
+- Pelaajien nimien muuttaminen ja kokonaispistemäärän muuttaminen pistekeskiarvoksi.
+- Yksittäisten pelien poistaminen tietokannasta
+- Animaatiot kortin jakoihin/sekoitukseen yms.
+- "Pihtaus"-animaatio viimeisen kortin paljastamiseen, mikäli hyvä pokeri-/tikkikäsi tulossa
+
+
+
